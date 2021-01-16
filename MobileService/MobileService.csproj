@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityServer4.Storage" Version="4.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.8.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bipap.DAL\Bipap.DAL.csproj" />
+    <ProjectReference Include="..\Bipap.Repository\Bipap.Repository.csproj" />
+    <ProjectReference Include="..\Bipap.Service\Bipap.Service.csproj" />
+  </ItemGroup>
+
+
+</Project>

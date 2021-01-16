@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - UI</title>
+    <link rel="stylesheet" href="~/login/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @*<link href="~/login/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />*@
+    <link rel="stylesheet" href="~/login/css/site.css" />
+
+    <link href="~/login/Plugins/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/login/css/style.css" rel="stylesheet" />
+    <link href="~/login/Plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/login/Plugins/Preloader/css/preloader.css" rel="stylesheet" />
+    <link href="~/login/Plugins/Preloader/css/buttonLoader.css" rel="stylesheet" />
+    <link href="~/login/Plugins/Notify/jquery.growl.css" rel="stylesheet" />
+    <script src="~/login/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/login/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/login/Plugins/Preloader/js/jquery.preloader.min.js"></script>
+    <script src="~/login/Plugins/Preloader/js/jquery.buttonLoader.js"></script>
+    <script src="~/login/Plugins/Notify/jquery.growl.js"></script>
+    <script src="~/login/Plugins/Hichart/newJS/highstock.js"></script>
+    <script src="~/login/Plugins/Hichart/newJS/exporting.js"></script>
+    @*<script src="~/Plugins/Hichart/highcharts.js"></script>*@
+    <script src="~/login/Plugins/Hichart/chartfunctions.js"></script>
+
+
+
+    @RenderSection("Scripts", required: false)
+</head>
+<body>
+    <header>
+        <nav class="site-header d-flex sticky-top py-1">
+            <div class="container-fluid d-flex justify-content-between site-header-div ">
+                <div class="d-none d-md-block logo">
+                    <img src="~/img/logo.png">
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="container mt-4 mb-4 someBlock">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="d-flex  border-top">
+        
+    </footer>
+
+    <script>
+        var obj = {},
+            someBlock = $('.someBlock');
+        function loadingBoxStart() {
+            someBlock.preloader({
+                text: obj.textVal,
+                percent: obj.percentVal,
+                duration: obj.durationVal
+            });
+            $('.form-control').each(function (k, v) {
+                if (v.value.length == 0) $(v).attr('disabled', true);
+            });
+        }
+        function loadingBoxStop() {
+            someBlock.preloader('remove');
+            $('.form-control').attr('disabled', false);
+        }
+
+        function loadBtnStart(btnId) {
+            $("#" + btnId).buttonLoader('start');
+        }
+        function loadBtnStop(btnId) {
+            $("#" + btnId).buttonLoader('stop');
+        }
+    </script>
+</body>
+</html>

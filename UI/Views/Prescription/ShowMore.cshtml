@@ -1,0 +1,116 @@
+﻿@model Prescription
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="table-responsive">
+        <table class="table tb-Presciption-inner">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-info  text-left">12345678</th>
+                    <th scope="col" class="no-border">Mode :<span> @(Model.DeviceType?.Title)</span></th>
+                    <th scope="col" class="no-border">Date :<span> @(Model.CreateDate)</span></th>
+                    <th scope="col" class="text-right no-border">
+                        <button data-id="@Model.Id" class="text-info btn-delete btn-edit-prescription">Edit</button>
+                        <button data-id="@Model.Id" class="text-danger btn-delete btn-delete-prescription">Delete</button>
+                    </th>
+                </tr>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"><span>Range</span></th>
+                    <th scope="col"><span>Resulation</span></th>
+                    <th scope="col"><span>Unit</span></th>
+                </tr>
+            </thead>
+            <tbody class="tbody"></tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(function () {
+        var deviceTypeId = parseInt(@Model.DeviceTypeId);
+        getDeviceTypeInformation(deviceTypeId);
+
+    });
+    function getDeviceTypeInformation(deviceTypeId) {
+         $.ajax({
+            url: '@Url.Action("GetDeviceTypeInformation", "Prescription")',
+            type: 'Post',
+            beforeSend: function () {
+                loadingBoxStart();
+            },
+            data: {
+                deviceTypeId: deviceTypeId
+            },
+             success: function (res) {
+                $(".tbody tr").remove();
+                if (res.data.length) {
+                    setDeviceTypeInformation(res.data);
+                } else {
+                    $.growl.error({ message: "برای نسخه انتخاب شده اطلاعاتی وجود ندارد" });
+                }
+            },
+            complete: function () {
+                loadingBoxStop();
+            },
+        });
+    }
+    function setDeviceTypeInformation(data) {
+        debugger;
+        var range ="@(Model.Range.ToString())".split(',');
+        for (var i = 0;i< data.length; i++) {
+            var template = '<tr>'
+                + '<td class="text-info text-left">' + data[i].title + '</td>'
+                + '<td>' + range[i]+'</td> '
+                + '<td class="resulotion">' + data[i].resolution + '</td>'
+                + '<td class="unit">' + data[i].unit + '</td>'
+                + '</tr>';
+            $(".tbody").append(template);
+        }
+    }
+</script>
+<script>
+    $(".btn-delete-prescription").click(function () {
+        var presciptionId = $(this).attr('data-id');
+        $.ajax({
+            url: '@Url.Action("Delete", "Prescription")',
+            type: 'Post',
+            beforeSend: function () {
+                loadingBoxStart();
+            },
+            data: {
+                prescriptionId: presciptionId
+            },
+            success: function (data) {
+                if (data.res) {
+                    $.growl.notice({ message: data.message });
+                    location.reload();
+                }
+                $.growl.warning({ message: data.message });
+            },
+            complete: function () {
+                loadingBoxStop();
+            },
+        });
+    });
+    $(".btn-edit-prescription").click(function () {
+         var presciptionId = $(this).attr('data-id');
+        $.ajax({
+            url: '@Url.Action("Edit", "Prescription")',
+            type: 'Post',
+            beforeSend: function () {
+                loadingBoxStart();
+            },
+            data: {
+                prescriptionId: presciptionId
+            },
+            success: function (html) {
+                $("#nav-prescription").html(html);
+            },
+            complete: function () {
+                loadingBoxStop();
+            },
+        });
+    })
+
+</script>

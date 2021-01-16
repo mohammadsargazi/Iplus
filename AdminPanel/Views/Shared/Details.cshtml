@@ -1,0 +1,20 @@
+﻿@model BaseModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<h2>Details of @ViewBag.TypeName "@Model"</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Property</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (HtmlPropertyControl pi in ViewBag.props)
+        {
+            @Html.Partial("_PropertyReader", pi);
+        }
+    </tbody>
+</table>

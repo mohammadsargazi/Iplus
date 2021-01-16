@@ -1,0 +1,123 @@
+﻿@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@using System.Globalization;
+@model IEnumerable<BaseModel>
+@{
+    var props = (List<System.Reflection.PropertyInfo>)ViewBag.props;
+
+
+    string Output(object value, PropertyInfo pi)
+    {
+        if (value == null)
+            return "";
+        var type = value.GetType();
+        if (type == typeof(DateTime) && pi.CustomAttributes.Any(i => i.AttributeType == typeof(DataTypeAttribute) && ((DataType)i.ConstructorArguments[0].Value == DataType.Date)))
+            return ToPersionDate((DateTime)value);
+        return value.ToString();
+    }
+
+    bool IsImage(object value)
+    {
+        var extn = value?.ToString().Split(".").Last();
+        if (extn == "png" || extn == "jpeg" || extn == "jpg" || extn == "jpg")
+            return true;
+        return false;
+    }
+    string ToPersionDate(DateTime d)
+    {
+        if (!IsValidDateTime(d))
+            return null;
+        PersianCalendar pc = new PersianCalendar();
+        return string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d));
+    }
+    bool IsValidDateTime(DateTime dt)
+    {
+        DateTime temp;
+        if (DateTime.TryParse(dt.ToString(), out temp) && dt.ToString() != "1/1/0001 12:00:00 AM")
+            return true;
+        return false;
+    }
+
+
+}
+
+@if (Model.Count() > 0)
+{
+    <div class="row">
+        <div class="col-md-4 col-sm-12 col-lg-4">
+            <input type="text" id="search" placeholder="جستجو" class="form-control"/>
+        </div>
+    </div>
+    <script>
+        $("#search").keyup(function () {
+            var searchText = $(this).val().toLowerCase();
+            // Show only matching TR, hide rest of them
+            $.each($(".table tbody tr"), function () {
+                if ($(this).text().toLowerCase().indexOf(searchText) === -1)
+                    $(this).hide();
+                else
+                    $(this).show();
+            });
+        }); 
+    </script>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>ردیف</th>
+            @foreach (PropertyInfo item in ViewBag.props)
+            {
+                var display = item.CustomAttributes.FirstOrDefault(k => k.AttributeType == typeof(DisplayAttribute));
+                <th>
+                    @(display != null ? display.NamedArguments.FirstOrDefault().TypedValue.Value : item.Name)
+                </th>
+            }
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{var countNumber = 1 + ((ViewBag.PageIndex - 1) * ViewBag.PageSize);}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @(countNumber++)
+                </td>
+                @foreach (var prov in props)
+                {
+                    //if (prov.GetValue(item) == null)
+                    //    continue;
+                    if (prov.CustomAttributes.Any(i => i.AttributeType == typeof(DataTypeAttribute) && ((DataType)i.ConstructorArguments[0].Value == DataType.Upload)))
+                    {
+                        var isImage = IsImage(prov.GetValue(item));
+                        if (isImage)
+                        {
+                            var imageUrl = prov.GetValue(item);
+
+                            <td>
+                                <img src="~/@(imageUrl)" width="50" height="50" />
+                            </td>
+                        }
+                        else
+                        {
+                            var audioUrl = ViewBag.AudioUrl + "\\" + prov.GetValue(item);
+                            <td>
+                                <article class="audio">
+                                    <audio controls>
+                                        <source src="~/uploads/@(audioUrl)" type="audio/mp3" />
+                                    </audio>
+                                </article>
+                            </td>
+                        }
+
+                    }
+                    else
+                    {
+                        <td>@Output(prov.GetValue(item), prov)</td>
+                    }
+                }
+                <td>@Html.Partial("_Actions", item)</td>
+            </tr>
+        }
+    </tbody>
+</table>

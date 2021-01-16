@@ -1,0 +1,12 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm((string)ViewBag.Action,(string)ViewBag.Controller,FormMethod.Post,new { enctype = "multipart/form-data" }))
+{
+    <div>File to import: <input type="file" name="file1" class="form-control" /></div>
+    <div><input type="submit" class="btn btn-primary" value="Import"/></div>
+}

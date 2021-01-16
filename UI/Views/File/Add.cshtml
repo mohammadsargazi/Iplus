@@ -1,0 +1,38 @@
+﻿@{
+    Layout = null;
+    var patientId = ViewBag.PatientId;
+}
+<div class="row">
+    <div class="col-md-12">
+        <partial name="_bootstrapFileupload" />
+    </div>
+</div>
+<div class="row mt-3" style="margin-left:3px;">
+    <button class="btn btn-success" id="btnAddFile">Save</button>
+</div>
+<script>
+    $("#btnAddFile").click(function () {
+        $(this).prop('disabled', false);
+        var formData = new FormData();
+        var input = document.getElementById("file-1");
+        var files = input.files;
+        for (var i = 0; i != files.length; i++) {
+            formData.append("files", files[i]);
+        }
+         $.ajax({
+             url:"/File/Upload?patientId="+@patientId, @*'@Url.Action("Upload", "File")',*@
+              data: formData,
+              processData: false,
+              contentType: false,
+              type: "POST",
+              success: function (data) {
+                 if (data.res) {
+                     $.growl.notice({ message: data.message });
+                 }
+                 $.growl.warning({ message: data.message });
+                 location.reload();
+              }
+         });
+        $(this).prop('disabled', true);
+    })
+</script>

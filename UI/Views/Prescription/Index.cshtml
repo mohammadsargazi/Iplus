@@ -1,0 +1,48 @@
+﻿@{
+    var patient = ViewBag.Patient as Patient;
+}
+
+<main role="main" class="container mt-4 mb-4">
+    <div class="jumbotron">
+        <div class="row align-items-center mb-3">
+            @*<div class="col-6 col-md-2 text-center">
+                    <img class="img-Presciption" src="../../asset/profile.png">
+                </div>*@
+            <div class="col-6 col-md-2">
+                <span class="info-patient"><b>@patient.FullName</b></span>
+            </div>
+            <div class="col-6 col-md-3">
+                <span class="info-patient"> National ID : <b>@patient.NantionalCode</b></span>
+            </div>
+            <div class="col-6 col-md-3">
+                <span class="info-patient">  Device ID : <b>@patient.DeviceId</b></span>
+            </div>
+            <div class="col-md-2">
+                <button class="text-danger btn-delete">Delete patient</button>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="w-100">
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-prescription"
+                           role="tab" aria-controls="nav-prescription" aria-selected="false">Presciption</a>
+                        <a class="nav-item nav-link " id="nav-home-tab" data-toggle="tab" href="#nav-file"
+                           role="tab" aria-controls="nav-file" aria-selected="true">Files</a>
+
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-prescription" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        @Html.ActionLink("List", "Prescription", new { patientId = patient.Id })
+
+                    </div>
+                    <div class="tab-pane fade" id="nav-file" role="tabpanel" aria-labelledby="nav-home-tab">
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

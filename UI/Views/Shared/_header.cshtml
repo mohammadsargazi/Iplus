@@ -1,0 +1,33 @@
+﻿
+<header>
+    <nav class="site-header d-flex sticky-top py-1">
+        <div class="container-fluid d-flex justify-content-between site-header-div ">
+            <div class="items">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    var currentUserId = User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier)
+                    .Select(c => c.Value).SingleOrDefault();
+                    var currentUserFullName = User.Claims.Where(c => c.Type == ClaimTypes.Name)
+                    .Select(c => c.Value).SingleOrDefault();
+                    <a asp-controller="Account" asp-action="Profile" asp-route-id="@currentUserId">
+                        <div class="introduction">
+                            <img class="d-none d-md-block" src="~/img/avatar_doctor.png">
+                            <span>
+                                <b>@currentUserFullName</b><br />
+                            </span>
+                        </div>
+                    </a>
+                    <a asp-controller="Account" asp-action="Logout">Logout</a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login">Login</a>
+                }
+
+            </div>
+            <div class="d-none d-md-block logo">
+                <img src="~/img/logo.png">
+            </div>
+        </div>
+    </nav>
+</header>

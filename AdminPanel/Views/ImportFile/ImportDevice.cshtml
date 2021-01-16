@@ -1,0 +1,30 @@
+﻿
+<partial name="_bootstrapFileupload" />
+
+<div class="row">
+    <div class="col-md-2 col-lg-2 col-xs-12">
+        <button class="btn btn-success">ذخیره فایل ها</button>
+    </div>
+</div>
+<script>
+    $(".btn-success").click(function () {
+        $(this).prop("disabled", true);
+        $(this).text("لطفا منتظر بمانید..");
+        
+        var formData = new FormData();
+        var input = document.getElementById("file-1");
+        var files = input.files;
+        for (var i = 0; i != files.length; i++) {
+            formData.append("files", files[i]);
+        }
+         $.ajax({
+              url:'@Url.Action("ImportDevice", "ImportFile")',
+              data: formData,
+              processData: false,
+              contentType: false,
+              type: "POST",
+              success: function (res) {
+              }
+            });
+    });
+</script>

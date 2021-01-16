@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - UI</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <link href="~/Plugins/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/Plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Plugins/Preloader/css/preloader.css" rel="stylesheet" />
+    <link href="~/Plugins/Preloader/css/buttonLoader.css" rel="stylesheet" />
+    <link href="~/Plugins/Notify/jquery.growl.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/Plugins/Preloader/js/jquery.preloader.min.js"></script>
+    <script src="~/Plugins/Preloader/js/jquery.buttonLoader.js"></script>
+    <script src="~/Plugins/Notify/jquery.growl.js"></script>
+    <script src="~/Plugins/Hichart/newJS/highstock.js"></script>
+    <script src="~/Plugins/Hichart/newJS/exporting.js"></script>
+    @*<script src="~/Plugins/Hichart/highcharts.js"></script>*@
+    <script src="~/Plugins/Hichart/chartfunctions.js"></script>
+
+
+    
+    @RenderSection("Scripts", required: false)
+</head>
+<body>
+    <partial name="_header" />
+    <div class="container">
+        <main role="main" class="container mt-4 mb-4 someBlock">
+            @RenderBody()
+        </main>
+    </div>
+
+    <partial name="_footer" />
+
+    <script>
+        var obj = {},
+            someBlock = $('.someBlock');
+        function loadingBoxStart() {
+            someBlock.preloader({
+                text: obj.textVal,
+                percent: obj.percentVal,
+                duration: obj.durationVal
+            });
+            $('.form-control').each(function (k, v) {
+                if (v.value.length == 0) $(v).attr('disabled', true);
+            });
+        }
+        function loadingBoxStop() {
+            someBlock.preloader('remove');
+            $('.form-control').attr('disabled', false);
+        }
+
+        function loadBtnStart(btnId) {
+            $("#" + btnId).buttonLoader('start');
+        }
+        function loadBtnStop(btnId) {
+            $("#" + btnId).buttonLoader('stop');
+        }
+    </script>
+</body>
+</html>

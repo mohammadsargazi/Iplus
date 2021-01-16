@@ -1,0 +1,36 @@
+﻿@using System.Reflection;
+@using AdminPanel.Controllers;
+@using System.ComponentModel.DataAnnotations.Schema;
+@model BaseModel
+@{
+    ViewBag.Title = $"ساختن {ViewBag.TypeName}";
+    var lcontrollers = ((List<Type>)ViewBag.LControllers).ToDictionary(i => i.BaseType.GenericTypeArguments.First(), i => i.Name.Replace("Controller", ""));
+}
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<h2>@ViewBag.Title</h2>
+
+@Html.ValidationSummary()
+
+@using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>عنوان</th>
+                <th>مقدار</th>
+                <th style="width:10%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (HtmlPropertyControl pi in ViewBag.props)
+            {
+                pi.list = lcontrollers;
+                @Html.Partial("_PropertyEditor", pi);
+            }
+        </tbody>
+    </table>
+
+    <input type="submit" value="اضافه کردن" class="btn btn-primary" />
+}

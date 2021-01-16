@@ -1,0 +1,350 @@
+﻿@model ReportModel
+@{
+    Layout = "~/Views/Shared/_PdfLayout.cshtml";
+
+}
+<style>
+    h6 {
+        margin-left: 50%;
+        font-size: 17px;
+    }
+    .highcharts-credits{
+        display:none;
+    }
+</style>
+<div style='width: 100%;float: left;border-bottom: 1px solid #dee2e6'>
+    <div style='width: 100%;float: left'>
+        <div style='width: 100%;float: left; margin-bottom: .25rem;margin-top: .25rem'>
+            <div style='display: flex; align-items: center'>
+                <img src='data:image/jpeg;base64,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' style='width: 170px;float: left;height: 85px;margin-right: 20px;'><div style='border-left: 1px solid #ccc;float: left;width: calc(100% - 150px);padding-left: 15px;'>
+                    <ul style='float: left;width: calc(100% - 150px);padding-left: 15px;list-style: none'>
+                        <li style='font-weight: bold; color: #545454;'>
+                            Name : <span style='color: #545454;font-weight: normal;'> @Model.PatientName</span>
+                        </li>
+                        <li style='font-weight: bold; color: #545454;'>patient ID : <span style='color: #545454;font-weight: normal;'>@Model.PatientId</span></li>
+                        <li style='font-weight: bold; color: #545454;'>Date of birth : <span style='color: #545454;font-weight: normal;'>@Model.DateOfBirth</span></li>
+                        <li style='font-weight: bold; color: #545454;'>Report prepared by : <span style='color: #545454;font-weight: normal;'>@Model.ReportedBy</span> on <span style='color: #545454;font-weight: normal;'>@Model.Time</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style='width: 100%;float: left'>
+    <h5 style='width: 100%;float: left;margin-top: 1rem;margin-bottom: 1rem;font-size: 1.5rem'>Patient Profile</h5>
+    <div style='width: 100%;float: left'>
+        <ul style='width: 100%;float: left;margin-bottom: 1.5rem;list-style: none;padding: 0'>
+            <li style='font-size: 1rem;font-weight: bold;color: #17a2b8'>Patient Information</li>
+            <li style='font-weight: bold'>
+                patient Name : <span style='font-weight: normal'> @Model.PatientName</span>
+            </li>
+            <li style='font-weight: bold;'>patient ID : <span style='font-weight: normal'>@Model.PatientId</span></li>
+            <li style='font-weight: bold;display: inline'>Date of birth : <span style='font-weight: normal'>@Model.DateOfBirth</span></li>
+            <li style='font-weight: bold;display: inline;margin-left: 2rem'> Age: <span style='font-weight: normal'>@Model.Age</span></li>
+            <li style='font-weight: bold;display: inline;margin-left: 2rem'> Gender: <span style='font-weight: normal'>@Model.Gender</span></li>
+        </ul><ul style='width: 100%;float: left; margin-bottom: 4px;list-style: none;padding: 0'>
+            <li style='font-size: 1rem;font-weight: bold;color: #17a2b8'>Contact Details</li>
+            <li style='font-weight: bold;'>Address : <span style='font-weight: normal'> @Model.Address</span></li>
+            <li style='font-weight: bold;'>Telephone Numbers : <span style='font-weight: normal'>@Model.TelephoneNumbers</span></li>
+            <li style='font-weight: bold;'>E-Mail : <span style='font-weight: normal'>@Model.Email</span></li>
+        </ul><ul style='width: 100%;float: left; margin-bottom: 4px;list-style: none; padding: 0'>
+            <li style='font-size: 1rem;font-weight: bold;color: #17a2b8'>Insurance</li>
+            <li style='font-weight: bold;display: inline;'>
+                Insurance Kind : <span style='font-weight: normal'>@Model.InsuranceKind</span>
+            </li>
+            <li style='font-weight: bold;display: inline;margin-left: 5rem'>Insurance Date : <span style='font-weight: normal'>@Model.InsuranceDate</span></li>
+            <li style='font-weight: bold;display: inline;margin-left: 5rem'>Insurance Id : <span style='font-weight: normal'>@Model.InsuranceId</span></li>
+        </ul>
+        <ul style='width: 100%;float: left; margin-bottom: 4px;list-style: none; padding: 0'>
+            <li style='font-size: 1rem;font-weight: bold;color: #17a2b8'>Doctor</li>
+            <li style='font-weight: bold;display: inline;width: 50%;float: left'>Treating Doctor : <span style='font-weight: normal'>@Model.TreatingDoctor</span></li>
+            <li style='font-weight: bold;display: inline;width: 50%;float: left'>Clinic: <span style='font-weight: normal'>@Model.Clinic</span></li>
+            @*<li style='font-weight: bold;display: inline;width: 50%;float: left'>Referring Doctor: <span style='font-weight: normal'>@Model.ReferingDoctor</span></li>
+            <li style='font-weight: bold;display: inline;width: 50%;float: left'>Clinic: <span style='font-weight: normal'></span></li>*@
+        </ul><ul style='width: 100%;float: left; margin-bottom: 4px;list-style: none; padding: 0'>
+            <li style='font-size: 1rem;font-weight: bold;color: #17a2b8'>Equipment Information</li>
+            <li style='font-weight: bold;display: inline;width: 33%;float: left'>Flow Generator: <span style='font-weight: normal'>@Model.FlowGenerator</span></li>
+            <li style='font-weight: bold;display: inline;width: 40%;float: left'>Flow Generator Serial Number: <span style='font-weight: normal'>@Model.FlowGeneratorSerialNumber</span></li>
+            <li style='font-weight: bold;display: inline;width: 25%;float: left'>Owner: <span style='font-weight: normal'>Yes</span></li>
+            <li style='font-weight: bold;display: inline;width: 33%;float: left'> <span style='font-weight: normal'> </span></li>
+            <li style='font-weight: bold;display: inline;width: 40%;float: left'>Flow Generator Software Version: <span style='font-weight: normal'>@Model.FlowGeneratorSoftwareVersion</span></li>
+            <li style='font-weight: bold;display: inline;width: 25%;float: left'> <span style='font-weight: normal'></span></li>
+            <li style='font-weight: bold;display: inline;width: 33%;float: left'>Humidifier: <span style='font-weight: normal'></span></li>
+            <li style='font-weight: bold;display: inline;width: 40%;float: left'>Humidifier Serial Number: <span style='font-weight: normal'>@Model.HumidifierSerialNumber</span></li>
+            <li style='font-weight: bold;display: inline;width: 25%;float: left'>Owner: <span style='font-weight: normal'>Yes</span></li>
+            <li style='font-weight: bold;display: inline;width: 33%;float: left'>Data Module: <span style='font-weight: normal'></span></li>
+            <li style='font-weight: bold;display: inline;width: 40%;float: left'>Data Module Serial Number: <span style='font-weight: normal'></span></li>
+            <li style='font-weight: bold;display: inline;width: 25%;float: left'>Owner: <span style='font-weight: normal'>Yes</span></li>
+            <li style='font-weight: bold;display: inline;width: 33%;float: left'> <span style='font-weight: normal'></span></li>
+            <li style='font-weight: bold;display: inline;width: 25%;float: left'>Flow Generator Software Version: <span style='font-weight: normal'></span></li>
+            <li style='font-weight: bold;display: inline;width: 25%;float: left'> <span style='font-weight: normal'></span></li>
+            <li style='font-weight: bold;display: inline;width: 100%;float: left'>Mask: <span style='font-weight: normal'></span></li>
+            <li style='font-weight: bold;display: inline;width: 100%;float: left'>Data Card: <span style='font-weight: normal'></span></li>
+        </ul>
+    </div>
+</div>
+<div style='display:block;page-break-before:always;'></div>
+<div style='width: 100%;float: left;margin-bottom:30px;'>
+    <h5 style='width: 100%;float: left;margin-top: 1rem;margin-bottom: 1rem;font-size: 1.5rem'>Statistics</h5>
+    <div style='width: 100%;float: left; border-bottom: 1px solid #dddddd'>
+        <h3 style='width: 100%;float: left; color: #17a2b8'>Device Setting</h3>
+        <ul style='list-style:none;padding:0;margin:0;;width: 33%;float:left;font-size: 0.8rem'>
+            <li> Therapy mode : <span><b>@Model.TherapyMode</b></span></li>
+            <li>Ramp Down Enable : <span><b>@Model.RampDownEnable</b></span></li>
+            <li>Ti Min : <span><b> @Model.TiMin</b></span></li>
+            <li>Target Vendilation : <span><b>@Model.TargetAlveolarVentilation</b></span></li>
+            <li>EPAP : <span><b>@Model.EPAP</b></span></li>
+        </ul><ul style='list-style:none;padding:0;margin:0;;width: 33%;float:left;font-size: 0.8rem'>
+            <li> Ramp Enable : <span><b>@Model.RampEnable</b></span></li>
+            <li>Essentials : <span><b>@Model.Essentials</b></span></li>
+            <li>Max PS : <span><b> @Model.MaxPS</b></span></li>
+            <li>Height : <span><b>@Model.Height</b></span></li>
+            <li>Start EPAP : <span><b>@Model.StartEPAP</b></span></li>
+        </ul><ul style='list-style:none;padding:0;margin:0;;width: 33%;float:left;font-size: 0.8rem'>
+            <li> Ramp Time : <span><b>@Model.RampTime</b></span></li>
+            <li>Ti Max : <span><b>@Model.TiMax</b></span></li>
+            <li>Min PS : <span><b> @Model.MinPS</b></span></li>
+            <li>Target Patient Rate : <span><b>@Model.TargetPatientRate</b></span></li>
+            <li>ODI Threshold : <span><b>@Model.ODIThreshold%</b></span></li>
+        </ul>
+    </div><div style='width: 100%;float: left;border-bottom: 1px solid #dddddd'>
+        <h3 style='width: 100%;float: left; color: #17a2b8'>IPAP - cmH2O</h3><ul style='list-style:none; padding:0;margin:0;width:100%;float:left;font-size: 0.8rem'>
+            <li style='width:33%;float:left'> Median : <span><b>@Model.IPAPMedian</b></span></li>
+            <li style='width:33%;float:left'>95th Percentile : <span><b>@Model.IPAPPercentile</b></span></li>
+            <li style='width:33%;float:left'>Minimum : <span><b> @Model.IPAPMinimum</b></span></li>
+        </ul>
+    </div><div style='width: 100%;float: left;border-bottom: 1px solid #dddddd'>
+        <h3 style='width: 100%;float: left; color: #17a2b8'>Leak - L/min</h3>
+        <ul style='list-style:none;padding:0;margin:0;;width:100%;float:left;font-size: 0.8rem'>
+            <li style='width:33%;float:left'> Median : <span><b>@Model.LeakMedian</b></span></li>
+            <li style='width:33%;float:left'>95th Percentile : <span><b>@Model.LeakPercentile</b></span></li>
+            <li style='width:33%;float:left'>Minimum : <span><b>@Model.LeakMinimum</b></span></li>
+        </ul>
+    </div><div style='width: 100%;float: left;border-bottom: 1px solid #dddddd'>
+        <h3 style='width: 100%;float: left; color: #17a2b8'>Tidal Volume - mL</h3>
+        <ul style='list-style:none;padding:0;margin:0;;width:100%;float:left;font-size: 0.8rem'>
+            <li style='width:33%;float:left'> Median : <span><b>@Model.TidalVolumeMedian</b></span></li>
+            <li style='width:33%;float:left'>95th Percentile : <span><b>@Model.TidalVolumePercentile</b></span></li>
+            <li style='width:33%;float:left'>Minimum : <span><b>@Model.TidalVolumeMinimum</b></span></li>
+        </ul>
+    </div><div style='width: 100%;float: left;border-bottom: 1px solid #dddddd'>
+        <h3 style='width: 100%;float: left; color: #17a2b8'>Minute Ventilation - L/min</h3>
+        <ul style='list-style:none;padding:0;margin:0;;width:100%;float:left;font-size: 0.8rem'>
+            <li style='width:33%;float:left'> Median : <span><b>@Model.MinuteVentilationMedian</b></span></li>
+            <li style='width:33%;float:left'>95th Percentile : <span><b>@Model.MinuteVentilationPercentile</b></span></li>
+            <li style='width:33%;float:left'>Minimum : <span><b> @Model.MinuteVentilationMinimum</b></span></li>
+        </ul>
+    </div><div style='width: 100%;float: left;border-bottom: 1px solid #dddddd'>
+        <h3 style='width: 100%;float: left; color: #17a2b8'>Respiratory Rate - breaths/min</h3>
+        <ul style='list-style:none;padding:0;margin:0;;width:100%;float:left;font-size: 0.8rem'>
+            <li style='width:33%;float:left'> Median : <span><b>@Model.RespiratoryRateMedian</b></span></li>
+            <li style='width:33%;float:left'>95th Percentile : <span><b>@Model.RespiratoryRatePercentile</b></span></li>
+            <li style='width:33%;float:left'>Minimum : <span><b> @Model.RespiratoryRateMinimum</b></span></li>
+            @*<li style='width:33%;float:left'>% Spontaneous triggered breaths : <span><b>91</b></span></li>
+            <li style='width:33%;float:left'>% Spontaneous cycled breaths : <span><b> 10</b></span></li>*@
+        </ul>
+    </div><div style='width: 100%;float: left;border-bottom: 1px solid #dddddd'>
+        <h3 style='width: 100%;float: left; color: #17a2b8'>Respiratory Indices - events/hr</h3>
+        <ul style='list-style:none;padding:0;margin:0;;width:100%;float:left;font-size: 0.8rem'>
+            <li style='width:33%;float:left'> Apnea Index : <span><b>@Model.ApneaIndex</b></span></li>
+            <li style='width:33%;float:left'>Hypopnea Index : <span><b>@Model.HypopneaIndex</b></span></li>
+            <li style='width:33%;float:left'>AHI : <span><b>@Model.AHI</b></span></li>
+        </ul>
+    </div>
+    <div style='width: 100%;float: left;border-bottom: 1px solid #dddddd'>
+        <h3 style='width: 100%;float: left; color: #17a2b8'>Total Usage</h3>
+        <ul style='list-style:none;padding:0;margin:0;;width:100%;float:left;font-size: 0.8rem'>
+            <li style='width:33%;float:left'>Total days : <span><b>@Model.TotalDays</b></span></li>
+            <li style='width:33%;float:left'>Total hours used : <span><b> @Model.TotalHoursUsed</b></span></li>
+            <li style='width:33%;float:left'>Average daily usage : <span><b> @Model.AverageDailyUsed</b></span></li>
+        </ul>
+    </div><div style='width: 100%;float: left;border-bottom: 1px solid #dddddd'>
+        <h3 style='width: 100%;float: left; color: #17a2b8'>I:E Ratio</h3>
+        <ul style='list-style:none;padding:0;margin:0;;width:100%;float:left;font-size: 0.8rem'>
+            <li style='width:33%;float:left'> Median : <span><b>@Model.IERatioMedian</b></span></li>
+            <li style='width:33%;float:left'>95th Percentile : <span><b>@Model.IERatioPercentile</b></span></li>
+            <li style='width:33%;float:left'>Minimum : <span><b> @Model.IERatioMinimum</b></span></li>
+        </ul>
+    </div>
+    <div style='width: 100%;float: left;border-bottom: 1px solid #dddddd'>
+        <h3 style='width: 100%;float: left; color: #17a2b8'>Inspiratory Time - seconds</h3>
+        <ul style='list-style:none;padding:0;margin:0;;width:100%;float:left;font-size: 0.8rem'>
+            <li style='width:33%;float:left'> Median : <span><b>@Model.InspiratoryTimeMedian</b></span></li>
+            <li style='width:33%;float:left'>95th Percentile : <span><b>@Model.InspiratoryTimePercentile</b></span></li>
+            <li style='width:33%;float:left'>Minimum : <span><b> @Model.InspiratoryTimeMinimum</b></span></li>
+        </ul>
+    @*</div><div style='width: 100%;float: left;border-bottom: 1px solid #dddddd'>
+        <h3 style='width: 100%;float: left; color: #17a2b8'>Alveolar Ventilation - L/min</h3>
+        <ul style='list-style:none;padding:0;margin:0;;width:100%;float:left;font-size: 0.8rem'>
+            <li style='width:33%;float:left'> Median : <span><b>@Model.AlveolarVentilationMedian</b></span></li>
+            <li style='width:33%;float:left'>95th Percentile : <span><b>@Model.AlveolarVentilationPercentile</b></span></li>
+            <li style='width:33%;float:left'>Minimum : <span><b>@Model.AlveolarVentilationMinimum</b></span></li>
+        </ul>
+    </div>*@
+</div>
+<div style='display:block;page-break-before:always;'></div>
+
+<div class="mt-4 mb-2 w-100 graph">
+    <h6>AHI (@Model.AHI)</h6>
+    <figure class="highcharts-figure">
+        <div id="AHI"></div>
+    </figure>
+</div>
+<div class="mt-4 mb-2 w-100 graph">
+    <h6>Ipap</h6>
+    <figure class="highcharts-figure">
+        <div id="Ipap"></div>
+    </figure>
+</div>
+
+<div class="mt-4 mb-2 w-100 graph">
+    <h6>Epap</h6>
+    <figure class="highcharts-figure">
+        <div id="Epap"></div>
+    </figure>
+</div>
+
+<div class="mt-4 mb-2 w-100 graph">
+    <h6>leak</h6>
+    <figure class="highcharts-figure">
+        <div id="leak"></div>
+    </figure>
+</div>
+
+<div class="mt-4 mb-2 w-100 graph">
+    <h6>Tidal Volume</h6>
+    <figure class="highcharts-figure">
+        <div id="TidalVolume"></div>
+    </figure>
+</div>
+
+<div class="mt-4 mb-2 w-100 graph">
+    <h6>Minute Ventilation</h6>
+    <figure class="highcharts-figure">
+        <div id="MinuteVentilation"></div>
+    </figure>
+</div>
+
+<div class="mt-4 mb-2 w-100 graph">
+    <h6>Respiratory Rate</h6>
+    <figure class="highcharts-figure">
+        <div id="RespiratoryRate"></div>
+    </figure>
+</div>
+<div class="mt-4 mb-2 w-100 graph">
+    <h6>Total Usage</h6>
+    <figure class="highcharts-figure">
+        <div id="TotalCotainer"></div>
+    </figure>
+</div>
+
+<script>
+    $(function () {
+        columnChart("Ipap",[@Model.IpapMedianArray], [@Model.IpapPrecentileArray], [@Model.IpapMinimumArray]);
+        columnChart("Epap", [@Model.EpapMedianArray], [@Model.EpapPrecentileArray], [@Model.EpapMinimumArray]);
+        columnChart("leak", [@Model.LeakMedianArray], [@Model.LeakPrecentileArray], [@Model.LeakMinimumArray]);
+        columnChart("TidalVolume", [@Model.TidalVolumeMedianArray], [@Model.TidalVolumePrecentileArray],[@Model.TidalVolumeMinimumArray]);
+        columnChart("MinuteVentilation", [@Model.MinuteVentilationMedianArray], [@Model.MinuteVentilationPrecentileArray], [@Model.MinuteVentilationMinimumArray]);
+        columnChart("RespiratoryRate", [@Model.RespiratoryRateMedianArray], [@Model.RespiratoryRatePrecentileArray], [@Model.RespiratoryRateMinimumArray]);
+        OneColumnChart("AHI","@Model.Ahi", "");
+        OneColumnChart("TotalCotainer","@Model.TotalUsage", "Total Usage");
+    });
+
+    function columnChart(containerId, dataMedian, dataPercentile, dataMinimum, title) {
+        debugger;
+        Highcharts.chart(containerId, {
+            chart: {
+                type: 'column'
+            },
+            tooltip: {
+                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+                shared: true
+            },
+            title: {
+                text: title
+            },
+            tooltip: {
+
+                shared: true
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'count'
+                }
+            },
+            colors: ['#a2d9da', '#48c8dd', '#0081a7'],
+            series: [{
+                name: 'Median',
+                data: dataMedian
+            }, {
+                name: '95th Percentile',
+                data: dataPercentile
+            }, {
+                name: 'Minimum',
+                data: dataMinimum
+            }]
+        });
+        $("#" + containerId).css("overflow", "visible");
+    }
+    function OneColumnChart(containerId, data, title) {
+        debugger;
+        var series = new Array();
+        for (var i = 0; i < data.split(';').length; i++) {
+            var newArray = new Array(data.split(';')[i].split(',')[0].toString(), parseFloat(data.split(';')[i].split(',')[1]));
+            series.push(newArray);
+        }
+
+        Highcharts.chart(containerId, {
+            chart: {
+                type: 'column'
+            },
+            tooltip: {
+                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+                shared: true
+            },
+            title: {
+                text: title
+            },
+            tooltip: {
+                valueDecimals: 2,
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                }
+            },
+            xAxis: {
+                categories: data.title
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function () {
+                    return Highcharts.numberFormat(this.y, 2);
+                }
+            },
+            yAxis: {
+                labels: {
+                    format: '{value:.2f}'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'count'
+                }
+            },
+            series: [{
+                name: series.name,
+                data: series,
+                tooltip: {
+                    formatter: function () {
+                        return this.series.name + ': <b>' + Highcharts.numberFormat(this.y, 2) + '%</b>';
+                    }
+                }
+            }]
+        });
+        $("#" + containerId).css("overflow", "visible");
+    }
+</script>

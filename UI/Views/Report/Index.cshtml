@@ -1,0 +1,226 @@
+﻿@*@{
+        var patient = ViewBag.Patient as Patient;
+        var file = ViewBag.File as File;
+        var StepOneModule = ViewBag.StepOneModule as StepOneModule;
+        var moduleStepTwoResult = ViewBag.ModuleStepTwoResult as ModuleStepTwoResult;
+        var graphSummaryModel = ViewBag.GraphSummaryModel as GraphSummaryViewModel;
+    }*@
+@{
+    var patient = ViewBag.Patient as Patient;
+    var selectedSessions = ViewBag.SelectedSessions;
+}
+<main role="main" class="container mt-4 mb-4">
+    <div class="jumbotron">
+        <div class="row align-items-center mb-3">
+            <div class="col-6 col-md-2">
+                <span class="info-patient"><b>@patient.FullName</b></span>
+            </div>
+            <div class="col-6 col-md-3">
+                <span class="info-patient"> National ID : <b>@patient.NantionalCode</b></span>
+            </div>
+            <div class="col-6 col-md-3">
+                <span class="info-patient">  Device ID : <b>@patient.DeviceId</b></span>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="w-100">
+                    <button id="exportPdf" class="float-right btn btn-success btn-sm">Export PDF</button>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-statics-tab" data-toggle="tab" href="#nav-statics"
+                           role="tab" aria-controls="nav-statics" aria-selected="false">Statics</a>
+                        <a class="nav-item nav-link " id="nav-graphs-tab" data-toggle="tab" href="#nav-graphs"
+                           role="tab" aria-controls="nav-graphs" aria-selected="true">Summary Graphs</a>
+
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-statics" role="tabpanel" aria-labelledby="nav-statics-tab">
+                        @*<partial name="Statics" model="@moduleStepTwoResult" />*@
+                    </div>
+                    <div class="tab-pane fade" id="nav-graphs" role="tabpanel" aria-labelledby="nav-graphs-tab">
+                        @*<partial name="GraphSummary" model="@graphSummaryModel" />*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Export PDF
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="export">
+                    <li>
+                        <label>Export User</label>
+                        <input type="text" value="Ali Abedi">
+                    </li>
+                    <li>
+                        <label>Patients</label>
+                        <input type="text" value="00 11 88">
+                    </li>
+                    <li>
+                        <label>Destination</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="validatedCustomFile" required>
+                            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                            <div class="invalid-feedback">Example invalid custom file feedback</div>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Chart</label>
+                        <ul>
+                            <li>
+                                <input type="checkbox">
+                                <label>chart 1</label>
+                            </li>
+                            <li>
+                                <input type="checkbox">
+                                <label>chart 1</label>
+
+                            </li>
+                            <li>
+                                <input type="checkbox">
+                                <label>chart 1</label>
+                            </li>
+                            <li>
+                                <input type="checkbox">
+                                <label>chart 1</label>
+
+                            </li>
+                            <li>
+                                <input type="checkbox">
+                                <label>chart 1</label>
+
+                            </li>
+                            <li>
+                                <input type="checkbox">
+                                <label>chart 1</label>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-success btn-sm">Export PDF</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var stepOneModuleIdArray = new Array();
+    var curreuntStepOneModuleId;
+    var splitSelectedSessions;
+    var i = 0;
+    var sessionCount = 0;
+        $(function () {
+            debugger;
+            var selectedSessions = GetURLParameter("stepOneModuleIds").replace("%27", "").replace("%27", "").replace("27%", ""); @*"@(selectedSessions.ToString())"*@;
+            splitSelectedSessions= selectedSessions.split(',');
+            curreuntStepOneModuleId = splitSelectedSessions[0];
+            sessionCount = splitSelectedSessions.length-1;
+            for (var i = 0; i < splitSelectedSessions.length; i++) {
+                var stepOneModuleId = parseInt(splitSelectedSessions[i]);
+                stepOneModuleIdArray.push(stepOneModuleId);
+            }
+            staticPartial(curreuntStepOneModuleId);
+            graphPartial(curreuntStepOneModuleId);
+        });
+
+        function btnNextClick() {
+            i++;
+            var stepOneModuleId = parseInt(splitSelectedSessions[i]);
+            staticPartial(stepOneModuleId);
+            graphPartial(stepOneModuleId);
+        }
+        function btnPreviewClick() {
+            i--;
+            var stepOneModuleId = parseInt(splitSelectedSessions[i]);
+            staticPartial(stepOneModuleId);
+            graphPartial(stepOneModuleId);
+        }
+        function staticPartial(stepOneModuleId) {
+            callAction("Statics", "nav-statics", stepOneModuleId);
+        }
+        function graphPartial(stepOnModuleId) {
+            callAction("GraphSummary", "nav-graphs", stepOnModuleId);
+        }
+
+        function nextStepOneModuleId(num) {
+            return stepOneModuleIdArray[($.inArray(num, stepOneModuleIdArray) + 1) % stepOneModuleIdArray.length];
+        }
+        function prevStepOneModuleId(num) {
+            return stepOneModuleIdArray[($.inArray(num, stepOneModuleIdArray) - 1 + stepOneModuleIdArray.length) % stepOneModuleIdArray.length];
+        }
+        function callAction(actionName, containerId, stepOneModuleId) {
+            $.ajax({
+                url: "/Report/" + actionName,
+                type: 'Post',
+                beforeSend: function () {
+                    loadingBoxStart();
+                },
+                data: {
+                    stepOneModuleId: stepOneModuleId
+                },
+                success: function (html) {
+                    loadingBoxStop();
+                    $("#" + containerId).html(html);
+                },
+                complete: function () {
+                    loadingBoxStop();
+                },
+            });
+        }
+        function GetURLParameter(sParam)
+        {
+            debugger;
+            var sPageURL = window.location.search.substring(1);
+            var sURLVariables = sPageURL.split('&');
+            for (var i = 0; i < sURLVariables.length; i++)
+            {
+                var sParameterName = sURLVariables[i].split('=');
+                if (sParameterName[0] == sParam)
+                {
+                    return sParameterName[1];
+                }
+            }
+    }
+
+
+
+</script>
+
+<script>
+    $("#exportPdf").click(function () {
+        var selectedSessions = GetURLParameter("stepOneModuleIds").replace("%27", "").replace("%27", "").replace("27%", "");
+        var fileId = GetURLParameter("fileId").replace("%27", "");
+        location.href = "/Report/ExportPDF?stepOneModuleIds=" + selectedSessions + "&fileId=" + fileId;
+        @*$.ajax({
+            url: '@Url.Action("ExportPDF", "Report")',
+            type: 'Post',
+            beforeSend: function () {
+                loadingBoxStart();
+            },
+            data: {
+                stepOneModuleIds: selectedSessions,
+                fileId: fileId
+            },
+            success: function (html) {
+                loadingBoxStop();
+                $("#" + containerId).html(html);
+            },
+            complete: function () {
+                loadingBoxStop();
+            },
+        });*@
+    })
+</script>

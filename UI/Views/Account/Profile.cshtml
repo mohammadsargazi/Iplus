@@ -1,0 +1,70 @@
+﻿@model Doctor
+<style>
+    input{
+        margin-left:20px;
+    }
+</style>
+<div class="jumbotron">
+    <div class="profile">
+        <h6 class="text-info w-100">Profile</h6>
+        <p class="text-secondary w-50 ">
+            What is Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and
+            typesetting
+            industry Lorem Ipsum has been the industry's standard dummy text ever
+            since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen
+            book
+            it has?
+        </p>
+        <br>
+        @*<div class="d-flex justify-content-between w-50">
+                <img src="../asset/profile.png" width=60 height=60>
+                <button class="text-info btn-delete">Edit Profile</button>
+                <button class="text-danger btn-delete">Logout</button>
+            </div>*@
+        <input id="id" type="hidden" value="@Model.Id" />
+        <ul class=" w-50 mt-4">
+            <li>
+                <label>FirstName</label>
+                <input id="FirstName" type="text" value="@Model.FirstName">
+            </li>
+            <li>
+                <label>LastName</label>
+                <input id="LastName" type="text" value="@Model.LastName">
+            </li>
+            <li>
+                <label>MedicalSystemCode</label>
+                <input id="MedicalSystemCodek" type="text" value="@Model.MedicalSystemCode">
+            </li>
+
+        </ul>
+        <div class="w-100 text-center mt-5">
+            <button id="btnUpdateDoctor" class="btn btn-info update  mt-5 mb-5">UpDate</button>
+        </div>
+    </div>
+</div>
+<script>
+    $("#btnUpdateDoctor").click(function () {
+        $.ajax({
+            url: '@Url.Action("Profile", "Account")',
+                type: 'Post',
+                beforeSend: function () {
+                    loadingBoxStart();
+                },
+                data: {
+                    FirstName: $("#FirstName").val(),
+                    LastName: $("#LastName").val(),
+                    MedicalSystemCodek: $("#MedicalSystemCodek").val(),
+                    Id: $("#id").val()
+                },
+                success: function (data) {
+                    if (!data.res) {
+                        $.growl.error({ message: data.message });
+                    }
+                    location.href ="/Patient/List"
+                },
+                complete: function () {
+                    loadingBoxStop();
+                },
+        });
+    });
+</script>

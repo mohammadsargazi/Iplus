@@ -1,0 +1,88 @@
+﻿@using System.Reflection;
+@using System.ComponentModel.DataAnnotations.Schema;
+@model HtmlPropertyControl
+<link rel="stylesheet" href="https://cdn.rawgit.com/behzadi/persianDatepicker/master/css/persianDatepicker-default.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.rawgit.com/behzadi/persianDatepicker/master/js/persianDatepicker.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script>
+    function toGregorianDate(elemetId) {
+        debugger;
+        var pd = new persianDate();
+        var value = pd.parse($("#" + elemetId + "_date").val());
+        var jdf = new jDateFunctions();
+        $('#' + elemetId).text(jdf.getGDate(value));
+    }
+</script>
+<style>
+    .select2-container{
+        width:100% !important;
+    }
+</style>
+
+@{
+    <tr>
+        <td>
+            <label>@(Model.DisplayName)</label>
+        </td>
+        <td>
+            @{
+                var display_value_type = Model?.CurrentValue?.GetType();
+                if (display_value_type == typeof(DateTime))
+                {
+                    Model.CurrentValue = ((DateTime)Model.CurrentValue).ToString("yyyy-MM-dd");
+                }
+            }
+            @if (Model.Attributes.Any(ia => ia.AttributeType == typeof(ForeignKeyAttribute)))
+            {
+                @Html.DropDownList((Model.SelectorName ?? Model.propertyInfo.Name), (IEnumerable<SelectListItem>)ViewData[Model.propertyInfo.Name], new { @class = "form-control", size = 1 })
+                <script>
+                    $("#" + "@(Model.SelectorName ?? Model.propertyInfo.Name)").select2();
+                </script>
+            }
+            else
+            {
+                @if (Model.html_control_type == "textarea")
+                {
+                    <textarea class="form-control" name="@Model.propertyInfo.Name" rows="10" maxlength="@Model.Max">@Html.Raw(Model?.CurrentValue??"")</textarea>
+                }
+                else if (Model.html_control_type == "input")
+                {
+                    if (Model.html_input_type == "date")
+                    {
+                        <input autocomplete="off" type="text" class="form-control" placeholder="تاریخ" id="@(Model.propertyInfo.Name)" name="@(Model.propertyInfo.Name)" value="@(Model.CurrentValue)" />
+                        <script>
+                            $("#"+'@(Model.propertyInfo.Name)').persianDatepicker({ showGregorianDate: true });
+                        </script>
+
+                        @*<div class="col-xs-12 col-md-4">
+                        <label for="@(Model.propertyInfo.Name)_date"><span class="glyphicon glyphicon-calendar"></span></label>
+                        <input name="@(Model.propertyInfo.Name)_date" onchange="toGregorianDate('@(Model.propertyInfo.Name)')" data-mdpersiandatetimepickershowing="false" title="" data-original-title="" data-mdpersiandatetimepickerselecteddatetime="{&quot;Year&quot;:1393,&quot;Month&quot;:10,&quot;Day&quot;:9,&quot;Hour&quot;:0,&quot;Minute&quot;:0,&quot;Second&quot;:0}" data-mdpersiandatetimepicker="" class="form-control" id="@(Model.propertyInfo.Name)_date" data-mddatetimepicker="true" data-trigger="click" data-targetselector="#@(Model.propertyInfo.Name)_date" data-groupid="group1" data-fromdate="true" data-enabletimepicker="false" data-placement="right" type="text">
+                    </div>
+                    <input type="hidden" name="@(Model.propertyInfo.Name)" id="@(Model.propertyInfo.Name)" />*@
+                    }
+                    else
+                    {
+                        @Html.Raw($"<input autocomplete=\"off\" name=\"{Model.propertyInfo.Name}\" class=\"form-control\"  {(Model.propertyInfo.PropertyType == typeof(bool) ? ((bool?)Model?.CurrentValue == true ? "checked" : "") : "")} value=\"{Model?.CurrentValue}\" type=\"{Model.html_input_type}\" {(Model.Max != null ? $"max={Model.Max}" : "")}  {(Model.Min != null ? $"min={Model.Min}" : "")} {(Model.Step != null ? $"step={Model.Step}" : "")} />")
+                    }
+
+
+                }
+                else if (Model.html_control_type != null)
+                {
+                    @Html.Raw($"<{Model.html_control_type} name=\"{Model.propertyInfo.Name}\" class=\"form-control\" value=\"{Model?.CurrentValue}\"{(Model.Max != null ? $"max={Model.Max}" : "")}  {(Model.Min != null ? $"min={Model.Min}" : "")}  {(Model.Step != null ? $"min={Model.Step}" : "")} />")
+                }
+            }
+
+            @if (Model.CurrentValue != null)
+            {
+                <br />
+                @Html.ValidationMessage(Model.propertyInfo.Name, Model.Message, new { }, Model.propertyInfo.Name)
+            }
+
+        </td>
+        <td>
+        </td>
+    </tr>
+}

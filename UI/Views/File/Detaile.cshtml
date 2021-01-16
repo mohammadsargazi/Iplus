@@ -1,0 +1,195 @@
+﻿@model IEnumerable<StepOneModule>
+@{
+    Layout = null;
+    var file = ViewBag.File as Bipap.DAL.Models.File;
+}
+<style>
+    .spn-show-selected-sessions {
+        cursor: pointer;
+    }
+
+    .container-session-per-day {
+        min-height: 550px;
+    }
+</style>
+<div class="row border-bottom">
+    <div class="col-3 col-md-3 col-lg-3">
+        <span>
+            Report File:<b>@file.CreateDate</b>
+        </span>
+    </div>
+    <div class="col-3 col-md-3 col-lg-3">
+        <span>
+            Time Activity:<b>@file.HoursActivity</b>
+        </span>
+    </div>
+
+    <div class="col-2 col-md-2 col-lg-2">
+        Day:<b>@file.DayCount</b>
+    </div>
+    <div class="col-2 col-md-2 col-lg-2">
+        <span>
+            Sessions:<b>@file.SessionCount</b>
+        </span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-7">
+        <div class="row p-3">
+            <span class="text-info">
+                Show All Sessions Report
+            </span>
+            <div class="d-inline ml-5">
+                <input type="checkbox">
+                <label class="text-info">Select All</label>
+            </div>
+        </div>
+        <div class="row">
+            <nav class="w-100">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    @{
+                        var isFirstTab = true;
+                    }
+                    @foreach (var itemYear in Model.GroupBy(x => x.Year))
+                    {
+                        foreach (var itemMonth in itemYear.GroupBy(x => x.Month))
+                        {
+
+                            var date = itemMonth.Select(x => x.Name).FirstOrDefault().Split("/")[0]+"/" + itemMonth.Select(x => x.Name).FirstOrDefault().Split("/")[1];
+                            <a class="nav-item nav-link @(isFirstTab ? "active" : "") nav-item-per-month" id="nav-@(date)-tab" data-toggle="tab" data-id="nav-@(date)" href="#nav-@(date)"
+                               role="tab" aria-controls="nav-@(date)" aria-selected="false">@(date)</a>
+                            isFirstTab = false;
+
+                        }
+                    }
+
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                @{
+                    var isFirstTabPanel = true;
+                }
+                @foreach (var itemYear in Model.GroupBy(x => x.Year))
+                {
+                    foreach (var itemMonth in itemYear.GroupBy(x => x.Month))
+                    {
+
+                        var date = itemMonth.Select(x => x.Name).FirstOrDefault().Split("/")[0] + "/" + itemMonth.Select(x => x.Name).FirstOrDefault().Split("/")[1];
+                        <div class="tab-pane fade show @(isFirstTabPanel ? "active" : "") tab-pane-item-per-month" id="nav-@date" role="tabpanel" aria-labelledby="nav-@date-tab">
+                            @foreach (var item in itemMonth.GroupBy(x => x.Day))
+                            {
+                                var itemName = item.Select(x => x.Name).FirstOrDefault().Split("/")[0] + "/" + item.Select(x => x.Name).FirstOrDefault().Split("/")[1] + "/" + item.Select(x => x.Name).FirstOrDefault().Split("/")[2];
+                                var itemId = item.Select(x => x.Name).FirstOrDefault();
+                                <input type="checkbox" id="@itemName" class="check-box-per-month" />
+                                <label for="@itemName"> @itemName</label><br>
+                            }
+                        </div>
+                        isFirstTabPanel = false;
+                    }
+                }
+
+            </div>
+        </div>
+        <script>
+            $(".nav-item-per-month").click(function () {
+                var id = $(this).attr("data-id");
+                $(".tab-pane-item-per-month").each(function () {
+                    $(this).removeClass('active');
+                });
+                $(".tab-pane-item-per-month").each(function () {
+                    if ($(this).attr('id') == id) {
+                        $(this).addClass('active');
+                    }
+                });
+            })
+        </script>
+    </div>
+    <div class="col-12 col-md-5 pr-0">
+        <div class="select-day p-2">
+            <span class="float-left" style="margin-top: 5px;"><b>Selected Day</b></span>
+            <button style="border: 1px solid;" class="spn-show-selected-sessions btn-details btn btn-success">Show Selected Sessions</button>
+            <span class="float-right spn-select-all" style="cursor:pointer;margin-top: 5px;"><i style="margin-right: 5px;" class="fa fa-check-square-o" aria-hidden="true"></i>Select All</span>
+        </div>
+        <div class="dates container-session-per-day">
+            @foreach (var itemYear in Model.GroupBy(x => x.Year))
+            {
+                foreach (var itemMonth in itemYear.GroupBy(x => x.Month))
+                {
+
+                    foreach (var itemDay in itemMonth.GroupBy(x => x.Day))
+                    {
+                        var day = itemDay.Select(x => x.Name).FirstOrDefault().Split("/")[0] + "/" + itemDay.Select(x => x.Name).FirstOrDefault().Split("/")[1] + "/" + itemDay.Select(x => x.Name).FirstOrDefault().Split("/")[2];
+                        var count = 1;
+                        <ul class="ul-per-day">
+                            <div class="p-2">
+                                <h6 class="d-inline mr-2"><b>@day</b></h6><span>@itemDay.Count()</span>
+                                Sessions
+                            </div>
+                            @foreach (var item in itemDay)
+                            {
+                                
+                                <li class="p-2">
+                                    <input type="checkbox" id="@item.Id" data-id="@day" class="check-box-per-day">
+                                    <span><b>Session @count</b></span>
+                                    <span><b>@(item.Hour+":"+item.Minutes)</b></span>
+                                    <button data-id="@(item.Id)" class="text-secondary btn-details float-right session-detail">
+                                        Show Session
+                                        <i data-id="@item.Id" class="fa fa-angle-right"></i>
+                                    </button>
+                                </li>
+                                count++;
+                            }
+                        </ul>
+
+                    }
+                }
+
+            }
+        </div>
+    </div>
+</div>
+<script>
+    $(".check-box-per-month").click(function () {
+        if ($(this).prop('checked') == true) {
+            var id = $(this).attr('id');
+            $(".check-box-per-day").each(function () {
+                if ($(this).attr('data-id') == id)
+                    $(this).prop('checked', true);
+            });
+        } else {
+            var id = $(this).attr('id');
+            $(".check-box-per-day").each(function () {
+                if ($(this).attr('data-id') == id)
+                    $(this).prop('checked', false);
+            });
+        }
+    });
+    $(".spn-show-selected-sessions").click(function () {
+        var selectedSession = 0;
+        var selectedSessionIds = [];
+        $('.check-box-per-day').each(function () {
+            if ($(this).prop('checked') == true) {
+                selectedSession++;
+                var id = $(this).attr('id');
+                selectedSessionIds.push(id);
+            }
+        });
+        if (selectedSession >= 1) {
+            location.href = "/Report/Index?stepOneModuleIds=" + "'" + selectedSessionIds+"'"+"&fileId="+@file.Id;
+        } else{
+            $.growl.warning({ message: "سشنی برای گزارش گیری انتخاب نشده است." });
+        }
+    });
+    $(".spn-select-all").click(function () {
+        $('.check-box-per-day').each(function () {
+            $(this).prop('checked', true);
+        })
+    });
+    $(".session-detail").click(function () {
+        debugger;
+        var id = $(this).attr('data-id');
+        var selectedSessionIds = id;
+        location.href = "/Report/Index?stepOneModuleIds=" + selectedSessionIds + "&fileId=" +@file.Id
+    });
+</script>

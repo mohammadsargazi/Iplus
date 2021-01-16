@@ -1,0 +1,13 @@
+﻿@using System.Reflection;
+@using System.ComponentModel.DataAnnotations.Schema;
+@model HtmlPropertyControl
+@{
+<tr>
+    <td>
+        <label>@(Model.DisplayName)</label>
+    </td>
+    <td>
+        @Model.CurrentValue        
+    </td>
+</tr>
+}

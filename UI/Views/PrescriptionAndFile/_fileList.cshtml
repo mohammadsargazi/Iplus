@@ -1,0 +1,86 @@
+﻿@model IEnumerable<File>
+@{
+    Layout = null;
+    var patientId = (int)ViewData["PatientId"];
+}
+
+<div class="d-flex justify-content-between Presciption">
+    <div><h6>files</h6>(<span>@Model.Count()</span> item)</div>
+    <button type="button" class="btn btn-success btn-sm" id="addFile">
+        <i class="fa fa-plus"></i> Add File
+    </button>
+</div>
+<div class="row mt-3">
+    <div class="table-responsive">
+        <table class="table table-striped tb-Presciption ">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"><span>Date And Time</span></th>
+                    <th scope="col"><span>Sessions</span></th>
+                    <th scope="col"><span>Day Count</span></th>
+                    <th scope="col"><span>FileUpload Type</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var count = 1;
+                }
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <th scope="row">@count.</th>
+                    <td>@item.CreateDate</td>
+                    <td>@item.SessionCount</td>
+                    <td>@item.DayCount</td>
+                    <td>@(item.FileUploadType?.Title)</td>
+                    <td class="text-right">
+                        <button data-id="@item.Id" class="text-info btn-delete btn-detail-file">Show More</button>
+                    </td>
+                </tr>
+                    count++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $("#addFile").click(function () {
+        $.ajax({
+            url: '@Url.Action("Add", "File")',
+            type: 'Get',
+            beforeSend: function () {
+                loadingBoxStart();
+            },
+            data:{
+                patientId:@patientId,
+            },
+            success: function (html) {
+                $("#nav-file").html(html);
+            },
+            complete: function () {
+                loadingBoxStop();
+            },
+        });
+    });
+    $(".btn-detail-file").click(function () {
+        var fileId = $(this).attr('data-id');
+        $.ajax({
+            url: '@Url.Action("Detaile", "File")',
+            type: 'Post',
+            beforeSend: function () {
+                loadingBoxStart();
+            },
+            data: {
+                fileId: fileId
+            },
+            success: function (html) {
+                $("#nav-file").html(html);
+            },
+            complete: function () {
+                loadingBoxStop();
+            },
+        });
+    });
+</script>

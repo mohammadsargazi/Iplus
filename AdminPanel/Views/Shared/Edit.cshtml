@@ -1,0 +1,37 @@
+﻿@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@using System.ComponentModel.DataAnnotations.Schema;
+@model BaseModel
+@{
+    ViewBag.Title = $"ویرایش  {ViewBag.TypeName} \"{Model}\"";
+}
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<h2>@ViewBag.Title</h2>
+
+@Html.ValidationSummary(); 
+
+@using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(m => m.Id)
+    <table class="table">
+        <thead>
+            <tr>
+                <th>عنوان</th>
+                <th>مقدار</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (HtmlPropertyControl pi in ViewBag.props)
+            {
+                @Html.Partial("_PropertyEditor", pi);
+            }
+        </tbody>
+    </table>
+    <input type="submit" value="ذخیره تغییرات" class="btn btn-primary" />
+    @if (!Model.Visible)
+    {
+        <a asp-action="Unhide" asp-route-id="@Model.Id" class="btn btn-success">Unhide</a>
+    }
+}

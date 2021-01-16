@@ -1,0 +1,56 @@
+﻿@model File
+
+<div class="row border-bottom">
+    <div class="col-2 col-md-2 col-lg-2">
+        <button id="btnPreviwSession" class="text-info btn-delete btn-detail-file">Previw</button>
+    </div>
+    <div class="col-3 col-md-3 col-lg-3">
+        <span>
+            Report File:<b>@Model?.CreateDate</b>
+        </span>
+    </div>
+    <div class="col-2 col-md-2 col-lg-2">
+        <span>
+            Time Activity:<b>@Model?.HoursActivity</b>
+        </span>
+    </div>
+    <div class="col-1 col-md-1 col-lg-1">
+        Day:<b>@Model?.DayCount</b>
+    </div>
+    <div class="col-2 col-md-2 col-lg-2">
+        <span>
+            Sessions:<b>@Model?.SessionCount</b>
+        </span>
+    </div>
+    <div style="text-align:right;" class="col-2 col-md-2 col-lg-2">
+        <button id="btnNextSession" class="text-info btn-delete btn-detail-file">Next</button>
+    </div>
+</div>
+<script>
+        $(function () {
+            if (i == 0) {
+                $("#btnPreviwSession").hide();
+            }
+            if (i == sessionCount) {
+                $("#btnNextSession").hide();
+            }
+        })
+        $("#btnPreviwSession").click(function () {
+            $("#btnNextSession").show();
+            btnPreviewClick();
+            debugger;
+            if (i == 0) {
+                debugger;
+                $(this).hide();
+            }
+        });
+        $("#btnNextSession").click(function () {
+            $("#btnPreviwSession").show();
+            btnNextClick();
+            debugger;
+            if (i == sessionCount) {
+                debugger;
+                $(this).hide();
+            }
+        });
+    </script>

@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F83C917F-56F4-4AC7-8E74-237C5F5CE32B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>IPlusApp</RootNamespace>
+    <AssemblyName>IPlusApp</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FarsiLibrary.Resources">
+      <HintPath>..\..\..\..\Desktop\FarsiLibrary.Resources.dll</HintPath>
+    </Reference>
+    <Reference Include="FarsiLibrary.Utils">
+      <HintPath>..\..\..\..\Desktop\FarsiLibrary.Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="FarsiLibrary.Win">
+      <HintPath>..\..\..\..\Desktop\FarsiLibrary.Win.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.1, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13.1\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.WinForms, Version=0.9.7.1, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.WinForms.0.9.7.1\lib\net45\LiveCharts.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework.Design, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework.Fonts, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.Fonts.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Syncfusion.Compression.Base, Version=18.1460.0.59, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Compression.Base.18.1.0.59\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Licensing, Version=18.1460.0.59, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Licensing.18.1.0.59\lib\net46\Syncfusion.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Pdf.Base, Version=18.1460.0.59, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Pdf.WinForms.18.1.0.59\lib\net46\Syncfusion.Pdf.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ExportPDF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExportPDF.Designer.cs">
+      <DependentUpon>ExportPDF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Functionality\CommonFunctionality.cs" />
+    <Compile Include="Functionality\ExportPdfFunctionality.cs" />
+    <Compile Include="Functionality\HelperMethods.cs" />
+    <Compile Include="Functionality\HtmlToPdfConverter.cs" />
+    <Compile Include="Functionality\LicenseInfo.cs" />
+    <Compile Include="Functionality\PageMargins.cs" />
+    <Compile Include="Functionality\PageOrientation.cs" />
+    <Compile Include="Functionality\PageSize.cs" />
+    <Compile Include="Functionality\PatientProfileFunctionality.cs" />
+    <Compile Include="Functionality\ProfileFunctionality.cs" />
+    <Compile Include="Functionality\SessionReportFunctionality.cs" />
+    <Compile Include="Functionality\ShowSessionFunctionality.cs" />
+    <Compile Include="Functionality\WkHtmlInput.cs" />
+    <Compile Include="Functionality\WkHtmlToPdfException.cs" />
+    <Compile Include="Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DoctorModel.cs" />
+    <Compile Include="Models\ExportPdfModels.cs" />
+    <Compile Include="Models\PatientModel.cs" />
+    <Compile Include="Models\PdfModel.cs" />
+    <Compile Include="Models\ReportModel.cs" />
+    <Compile Include="Models\SessionModel.cs" />
+    <Compile Include="Models\StaticValue.cs" />
+    <Compile Include="PatientProfile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PatientProfile.Designer.cs">
+      <DependentUpon>PatientProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Profile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Profile.Designer.cs">
+      <DependentUpon>Profile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SessionReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SessionReport.Designer.cs">
+      <DependentUpon>SessionReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ShowSession.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ShowSession.Designer.cs">
+      <DependentUpon>ShowSession.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="ExportPDF.resx">
+      <DependentUpon>ExportPDF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PatientProfile.resx">
+      <DependentUpon>PatientProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Profile.resx">
+      <DependentUpon>Profile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="SessionReport.resx">
+      <DependentUpon>SessionReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ShowSession.resx">
+      <DependentUpon>ShowSession.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="File\" />
+    <Folder Include="images\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="JsonFile\Doctor.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

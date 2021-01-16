@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DynamicExpresso.Core" Version="2.3.3" />
+    <PackageReference Include="ExcelDataReader" Version="3.6.0" />
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bipap.DAL\Bipap.DAL.csproj" />
+    <ProjectReference Include="..\Bipap.Repository\Bipap.Repository.csproj" />
+    <ProjectReference Include="..\Bipap.Service\Bipap.Service.csproj" />
+  </ItemGroup>
+
+</Project>

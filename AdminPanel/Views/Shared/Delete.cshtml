@@ -1,0 +1,36 @@
+﻿@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@using System.ComponentModel.DataAnnotations.Schema;
+@model BaseModel
+
+<h2>Delete @ViewBag.TypeName</h2>
+<h4>Details</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>عنوان</th>
+            <th>مقدار</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (HtmlPropertyControl i in ViewBag.props)
+        {
+            var display = i.Attributes.FirstOrDefault(k => k.AttributeType == typeof(System.ComponentModel.DataAnnotations.DisplayAttribute));
+
+            <tr>
+                <td>
+                    @(display != null ? display.NamedArguments.FirstOrDefault().TypedValue.Value : i.propertyInfo.Name)
+                </td>
+                <td>
+                    @i.propertyInfo.GetValue(Model)
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+@using (Html.BeginForm(FormMethod.Post))
+{
+    <input type="hidden" name="id" value="@Model.Id" />
+    <input type="submit" value="حذف" class="btn btn-danger" />
+}

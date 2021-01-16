@@ -1,0 +1,218 @@
+﻿@model ModuleStepTwoResult
+@{
+    Layout = null;
+    var file = ViewBag.File as File;
+}
+<partial name="_statics" Model="@file" />
+<style>
+    .spn-static-label{
+        margin-left:4px;
+    }
+</style>
+<div class="row">
+    <div class="container device-setting">
+        <div>
+            <span class="text-device">Device Setting</span>
+            <span>Device : Lumis VPAP 150 ST(S/N :22152006799)</span>
+        </div>
+        <ul class="col-12 col-md-4 mb-2">
+            <li>
+                Therapy mode :
+                <span style="">@Model?.ModeStr</span>
+            </li>
+            <li>
+                Start Ramp :
+                <span>@Model?.Start_Ramp</span><span class="spn-static-label">s</span>
+            </li>
+            <li>
+                APAP Max :
+                <span> @Model?.Apap_Max</span><span class="spn-static-label">cmH2O</span>
+            </li>
+        </ul>
+        <ul class="col-12 col-md-4 mb-2">
+            <li>
+                IPAP :
+                <span>@Model?.IPAP</span><span class="spn-static-label">cmH2O</span>
+            </li>
+            <li>
+                EPR :
+                <span>@Model?.EPR</span><span class="spn-static-label">mmH2O</span>
+            </li>
+            <li>
+                APAP Min :
+                <span> @Model?.Apap_Min</span><span class="spn-static-label">cmH2O</span>
+            </li>
+        </ul>
+        <ul class="col-12 col-md-4 mb-2">
+            <li>
+                EPAP :
+                <span>@Model?.EPAP</span><span class="spn-static-label">cmH2O</span>
+            </li>
+            <li>
+                EPR Ramp :
+                <span>@Model?.EPR_Ramp</span><span class="spn-static-label">min</span>
+            </li>
+            <li>
+                Sense I :
+                <span> @Model?.SENS_I</span><span class="spn-static-label">L/Min</span>
+            </li>
+
+        </ul>
+        <ul class="col-12 col-md-4 mb-2">
+            <li>
+                Initial Cpap :
+                <span>@Model?.Initial_CPAP</span><span class="spn-static-label">cmH2O</span>
+            </li>
+            <li>
+                VT :
+                <span>@Model?.VT</span><span class="spn-static-label">ml</span>
+            </li>
+            <li>
+                Sense E :
+                <span> @Model?.SENS_E</span><span class="spn-static-label">%   Peak Flow</span>
+            </li>
+
+        </ul>
+        <ul class="col-12 col-md-4 mb-2">
+            <li>
+                Pressure Cpap :
+                <span>@Model?.Pressure_CPAP</span><span class="spn-static-label">cmH2O</span>
+            </li>
+            <li>
+                Slope :
+                <span>@Model?.Slope</span><span class="spn-static-label">ms</span>
+            </li>
+            <li>
+                RR :
+                <span> @Model?.RR</span><span class="spn-static-label">BPM</span>
+            </li>
+
+        </ul>
+        <ul class="col-12 col-md-4 mb-2">
+            <li>
+                Ti Max :
+                <span>@Model?.Ti_Max</span><span class="spn-static-label">s</span>
+            </li>
+            <li>
+                IPAP Max :
+                <span>@Model?.IPAP_Max</span><span class="spn-static-label">cmH2O</span>
+            </li>
+            <li>
+                Heater SetPoint :
+                <span> @Model?.HeaterSetPoint</span><span class="spn-static-label">°C</span>
+            </li>
+
+        </ul>
+        <ul class="col-12 col-md-4 mb-2">
+            <li>
+                Ti Min :
+                <span>@Model?.Ti_Min</span><span class="spn-static-label">s</span>
+            </li>
+            <li>
+                IPAP Min :
+                <span>@Model?.IPAP_Min</span><span class="spn-static-label">cmH2O</span>
+            </li>
+        </ul>
+    </div>
+    <div class="container device-setting-rows">
+        <ul>
+            <li style="">
+                <h6 style="">Minute Menrilation</h6>
+                <div class="row">
+                    <span class="col-12 col-md-4">
+                        Median :
+                        <span style="color: #5e5e5e;"><b>@Model?.minute_vMedian</b></span>
+                    </span>
+                    <span class="col-12 col-md-4">
+                        95 th persantile :
+                        <span style="color: #5e5e5e;"><b>@Model?.minute_vPresent</b></span>
+                    </span>
+                    <span class="col-12 col-md-4">
+                        Minimum : <span style="color: #5e5e5e;"><b>@Model?.minute_vMinimum</b></span>
+                    </span>
+                </div>
+            </li>
+            <li style="">
+                <h6 style="">Tidal Volume</h6>
+                <div class="row">
+                    <span class="col-12 col-md-4">
+                        Median :
+                        <span style="color: #5e5e5e;"><b>@Model?.tidal_volumeMedian</b></span>
+                    </span>
+                    <span class="col-12 col-md-4">
+                        95 th persantile :
+                        <span style="color: #5e5e5e;"><b>@Model?.tidal_volumePresent</b></span>
+                    </span>
+                    <span class="col-12 col-md-4">
+                        Minimum : <span style="color: #5e5e5e;"><b>@Model?.tidal_volumeMinimum</b></span>
+                    </span>
+                </div>
+            </li>
+            <li style="">
+                <h6 style="">Respiratory Rate</h6>
+                <div class="row">
+                    <span class="col-12 col-md-4">
+                        Median :
+                        <span style="color: #5e5e5e;"><b>@Model?.bpmMedian</b></span>
+                    </span>
+                    <span class="col-12 col-md-4">
+                        95 th persantile :
+                        <span style="color: #5e5e5e;"><b>@Model?.bpmPresent</b></span>
+                    </span>
+                    <span class="col-12 col-md-4">
+                        Minimum : <span style="color: #5e5e5e;"><b>@Model?.bpmMinimum</b></span>
+                    </span>
+                </div>
+            </li>
+            <li style="">
+                <h6 style="">Leakage</h6>
+                <div class="row">
+                    <span class="col-12 col-md-4">
+                        Median :
+                        <span style="color: #5e5e5e;"><b>@Model?.LeakMedian</b></span>
+                    </span>
+                    <span class="col-12 col-md-4">
+                        95 th persantile :
+                        <span style="color: #5e5e5e;"><b>@Model?.LeakPresent</b></span>
+                    </span>
+                    <span class="col-12 col-md-4">
+                        Minimum : <span style="color: #5e5e5e;"><b>@Model?.LeakMinimum</b></span>
+                    </span>
+                </div>
+            </li>
+            <li style="">
+                <h6 style="">AHI</h6>
+                <div class="row">
+                    <span class="col-12 col-md-4">
+                        Median :
+                        <span style="color: #5e5e5e;"><b>@Model?.appnea_indexesMedian</b></span>
+                    </span>
+                    <span class="col-12 col-md-4">
+                        95 th persantile :
+                        <span style="color: #5e5e5e;"><b>@Model?.appnea_indexesPresent</b></span>
+                    </span>
+                    <span class="col-12 col-md-4">
+                        Minimum : <span style="color: #5e5e5e;"><b>@Model?.appnea_indexesMinimum</b></span>
+                    </span>
+                </div>
+            </li>
+            <li style="">
+                <h6 style="">Heater Temperature</h6>
+                <div class="row">
+                    <span class="col-12 col-md-4">
+                        Median :
+                        <span style="color: #5e5e5e;"><b>@Model?.HeaterMedian</b></span>
+                    </span>
+                    <span class="col-12 col-md-4">
+                        95 th persantile :
+                        <span style="color: #5e5e5e;"><b>@Model?.HeaterPresent</b></span>
+                    </span>
+                    <span class="col-12 col-md-4">
+                        Minimum : <span style="color: #5e5e5e;"><b>@Model?.HeaterMinimum</b></span>
+                    </span>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+</div>

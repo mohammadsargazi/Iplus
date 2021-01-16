@@ -1,0 +1,54 @@
+﻿@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@model IQueryable<BaseModel>
+@{ 
+    var props = (List<HtmlPropertyControl>)ViewBag.props;
+    props = props.Where(i => !i.Attributes.Any(j => j.AttributeType == typeof(NotListedAttribute))).ToList();
+
+    string Output(object value, PropertyInfo pi)
+    {
+        if (value == null) return "";
+        var type = value.GetType();
+        if (type == typeof(DateTime) && pi.CustomAttributes.Any(i => i.AttributeType == typeof(DataTypeAttribute) && ((DataType)i.ConstructorArguments[0].Value == DataType.Date)))
+            return ((DateTime)value).ToString("dd/MM/yyyy");
+        return value.ToString();
+    }
+
+}
+<table class="table" id="results">
+    <thead>
+        <tr>
+            @{
+                var iii = 0;
+            }
+            @foreach (var item in props)
+            {
+                var display = item.Attributes.FirstOrDefault(k => k.AttributeType == typeof(DisplayAttribute));
+                <th>
+                    <a href="#" onclick="sortTable(@iii,0)" id="sort_@iii">
+                        @(display != null ? display.NamedArguments.FirstOrDefault().TypedValue.Value : item.propertyInfo.Name)
+                        @{ 
+                            iii++;
+                        }
+                    </a>
+                </th>
+            }
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model!=null && Model.Any())
+        { 
+            foreach (var item in Model)
+            {
+                <tr>
+                    @foreach (var prov in props)
+                    {
+                        <td>@Output(prov.propertyInfo.GetValue(item), prov.propertyInfo)</td>
+                    }
+                    <td>@Html.Partial("_Actions", item)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -1,0 +1,131 @@
+﻿@model IQueryable<BaseModel>
+@using System.Reflection;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<h3>Filter @ViewBag.TypeName</h3>
+<div class="panel-group">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse1">Search form</a>
+            </h4>
+        </div>
+        <div id="collapse1" class="panel-collapse collapse">
+            @using (Html.BeginForm((string)ViewBag.Action,(string)ViewBag.Controller, FormMethod.Post,new { id="searchform"}))
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="width:5%">Active</th>
+                            <th>Property</th>
+                            <th>Comparer</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var prop in ((List<HtmlPropertyControl>)ViewBag.props).Where(i => !i.Attributes.Any(j => j.AttributeType == typeof(NotListedAttribute))))
+                        {
+                            @Html.Partial("_PropertyFilter", prop)
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" style="text-align:center">
+                                <input type="submit" class="btn btn-primary" value="Search" />
+                                <input type="button" class="btn btn-success" value="Export to OpenXML Excel" onclick="$('#searchform')[0].action += '/openxml'; $('#searchform')[0].submit(); $('#searchform')[0].action.replace('/openxml','')" />
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            }        
+        </div>
+    </div>
+</div>
+
+@if (Model != null)
+{
+    <h4>Results</h4>
+    @Html.Partial("_Filter",Model)
+}
+@{var script = ((string)ViewBag.Script ?? "").ToString();}
+@section Scripts{
+    <script>
+            function SelectBetween(id) {
+                var style = "visibility:hidden;width:40%;float:left";
+                if ($("#comp_" + id).val() == 'Between' || $("#comp_" + id).val() == 'OutRange') {
+                    style = "visibility:visible;width:40%;float:left";
+                }
+                $("#" + id + '_1').attr('style', style);
+        }
+
+        function MarkRequired(id) {
+            console.log(($("#act_" + id)).val());
+
+            if ($("#act_" + id)[0].checked) {
+                $("#" + id).attr("required", "");
+                $("#comp_" + id).attr("required", "");
+            } else
+            {
+                $("#" + id)[0].attributes.removeNamedItem("required");
+                $("#comp_" + id)[0].attributes.removeNamedItem("required");
+            }
+
+        }
+
+        function sortTable(index,order) {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("results");
+            switching = true;
+            /* Make a loop that will continue until
+            no switching has been done: */
+            while (switching) {
+                // Start by saying: no switching is done:
+                switching = false;
+                rows = table.getElementsByTagName("TR");
+                /* Loop through all table rows (except the
+                first, which contains table headers): */
+                for (i = 1; i < (rows.length - 1); i++) {
+                    // Start by saying there should be no switching:
+                    shouldSwitch = false;
+                    /* Get the two elements you want to compare,
+                    one from current row and one from the next: */
+                    x = rows[i].getElementsByTagName("TD")[index];
+                    y = rows[i + 1].getElementsByTagName("TD")[index];
+                    // Check if the two rows should switch place:
+                    if (order == 0)
+                    {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            // I so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else
+                    {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            // I so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    /* If a switch has been marked, make the switch
+                    and mark that a switch has been done: */
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+            $("#sort_" + index).attr('onclick', "sortTable(" + index + "," + (1-order)+ ")");
+        }
+
+    </script>
+    
+    <script>
+       @foreach (var prop in ((List<HtmlPropertyControl>)ViewBag.props).Where(i=>!string.IsNullOrWhiteSpace(i.OutputScript)))
+        {
+            @Html.Raw(prop.OutputScript)
+        }
+    </script>
+
+}

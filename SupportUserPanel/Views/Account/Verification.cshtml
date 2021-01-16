@@ -1,0 +1,53 @@
+﻿@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    var mobile = ViewBag.Mobile;
+}
+<main role="main" class="container mt-4 mb-4">
+    <div class="jumbotron p-0">
+        <div class="login ">
+            <div>
+                <img src="~/img/verfiyo.png" width="100%">
+            </div>
+            <h4 class="text-center text-success mt-3">Verification</h4>
+            <p class="p-2 p-md-3 p-lg-4  text-center text-secondary">
+                What is Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry Lorem
+                Ipsum has been the industry's standard dummy text ever since the 1500s. of the printing and typesetting industry Lorem
+                Ipsum has been the industry's standard dummy text ever since the 1500s.
+            </p>
+            <div class="text-center d-flex justify-content-center">
+                <label class="mr-3 mt-1 text-secondary">Activation Code</label>
+                <input id="ActiveCode" class=" text-secondary" type="text">
+                <input id="Mobile" type="hidden" value="@mobile" />
+            </div>
+            <div class="w-100 text-center mt-5">
+                <button class="btn btn-success send mt-4 mb-5 verification-code">Done</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    $(".verification-code").click(function () {
+        debugger;
+        $.ajax({
+            url: '@Url.Action("CheckLoginCode", "Account")',
+                type: 'Post',
+                beforeSend: function () {
+                    loadingBoxStart();
+                },
+                data: {
+                    Mobile: $("#Mobile").val(),
+                    ActiveCode: $("#ActiveCode").val()
+                },
+                success: function (data) {
+                    if (!data.res) {
+                        $.growl.error({ message: data.message });
+                    }
+                    location.href = "/Home/Index";
+                },
+                complete: function () {
+                    loadingBoxStop();
+                },
+        });
+    })
+</script>

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<BaseModel>
+@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@{
+    ViewData["Title"] = "لیست " + ViewBag.TypeName + "ها";
+    var props = (List<System.Reflection.PropertyInfo>)ViewBag.props;
+
+}
+
+<h2>@ViewData["Title"]</h2>
+<hr />
+<a asp-action="Create" class="btn btn-primary">اضافه کردن مورد جدید</a>
+<hr />
+
+@*<div class="col-md-4">
+        <select id="pagesize" class="form-control" onchange="document.location='@ViewBag.Host/@ViewBag.Controller/@ViewBag.Action/1/'+$('#pagesize').val();">
+            @foreach (var i in new[] { 10, 20, 50, 100 })
+            {
+                <option value="@i">@i آیتم در صفحه</option>
+            }
+        </select>
+    </div>*@
+@Html.Partial("_Index", Model)
+<div>
+    <ul class="pagination">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="pagination-sm"><a asp-action="Index" asp-route-id="@i" asp-route-id1="@ViewBag.PageSize">@i</a></li>
+        }
+    </ul>
+</div>
+@section Scripts{
+    <script>
+    $("#pagesize").val(@ViewBag.PageSize)
+    </script>
+}

@@ -1,0 +1,90 @@
+﻿@model GraphSummaryViewModel
+@{
+    Layout = null;
+    var file = ViewBag.File as File;
+}
+<style>
+    .highcharts-input-group{
+        display:none !important;
+    }
+    .highcharts-credits {
+        display:none;
+    }
+</style>
+<div class="mt-4 mb-2 w-100 graph">
+    <h6>Pressure</h6>
+    <figure class="highcharts-figure">
+        <div id="pressure"></div>
+    </figure>
+</div>
+<div class="mt-4 mb-2 w-100 graph">
+    <h6>TidalVolume</h6>
+    <figure class="highcharts-figure">
+        <div id="tidalVolume"></div>
+    </figure>
+</div>
+<div class="mt-4 mb-2 w-100 graph">
+    <h6>Leak</h6>
+    <figure class="highcharts-figure">
+        <div id="leak"></div>
+    </figure>
+</div>
+<div class="mt-4 mb-2 w-100 graph">
+    <h6>Flow</h6>
+    <figure class="highcharts-figure">
+        <div id="flow"></div>
+    </figure>
+</div>
+
+<script>
+
+    $(function () {
+        debugger;
+        var pressureArray = new Array();
+        var tidalVolumeArray =new Array();
+        var leakArray =new Array();
+        var flowArray = new Array();
+        var pressure = "@(Model.Pressure.ToString())";
+        var splitPressure = pressure.split(',');
+        for (var i = 0; i < splitPressure.length; i++) {
+                pressureArray.push(parseInt(splitPressure[i]));
+        }
+        drawChart("pressure", pressureArray);
+        var tidalVolume = "@(Model.TidalVolume.ToString())";
+        var splittidalVolume = tidalVolume.split(',');
+        for (var i = 0; i < splittidalVolume.length; i++) {
+            tidalVolumeArray.push(parseInt(splittidalVolume[i]));
+        }
+        drawChart("tidalVolume", tidalVolumeArray);
+        var leak = "@(Model.Leak.ToString())";
+        var splitleak = leak.split(',');
+        for (var i = 0; i < splitleak.length; i++) {
+            leakArray.push(parseInt(splitleak[i]));
+        }
+        drawChart("leak", leakArray);
+        var flow = "@(Model.Flow.ToString())";
+        var splitflow = flow.split(',');
+        for (var i = 0; i < splitflow.length; i++) {
+            flowArray.push(parseInt(splitflow[i]));
+        }
+        drawChart("flow", flowArray);
+        debugger;
+    });
+    function drawChart(containerId, dataArray) {
+        $('#' + containerId).highcharts('StockChart', {
+            chart: {
+                zoomType: ''
+            },
+            rangeSelector: {
+                selected: 1
+            },
+            xAxis: {
+                categories: dataArray
+            },
+            series: [{
+                name: containerId,
+                data: dataArray
+            }]
+        });
+    }
+</script>

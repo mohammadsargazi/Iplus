@@ -1,0 +1,248 @@
+﻿@model Prescription
+@{
+    Layout = null;
+    var DeviceType = ViewBag.DeviceType as Dictionary<int, string>;
+    var patientId = ViewBag.PatientId;
+}
+<div class="row">
+    <div class="select-mode">
+        <label class="d-inline" for="exampleFormControlSelect1">Select Mode : </label>
+        <select class="form-control d-inline" id="deviceType">
+            @foreach (var item in DeviceType)
+            {
+                <option value="@item.Key">@item.Value</option>
+            }
+        </select>
+    </div>
+</div>
+<input type="hidden" id="prescriptionId" value="@Model.Id" />
+<div class="row mt-3">
+    <div class="table-responsive">
+        <table class="table tb-Presciption-inner">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"><span>value</span></th>
+                    <th scope="col"><span>Range</span></th>
+                    <th scope="col"><span>Resulation</span></th>
+                    <th scope="col"><span>Unit</span></th>
+                </tr>
+            </thead>
+            <tbody class="tbody"></tbody>
+        </table>
+    </div>
+</div>
+<div class="row mt-3" style="margin-left:3px;">
+    <button class="btn btn-success" id="btnAddPrescriptionForPatient">Save</button>
+</div>
+
+<script>
+    $(function () {
+        debugger;
+        if ($("#prescriptionId").val() == 0) {
+            var deviceTypeId = parseInt($("#deviceType").val());
+            getDeviceTypeInformation(deviceTypeId);
+        } else {
+            $("#deviceType").val(parseInt(@Model.DeviceTypeId));
+            var deviceTypeId = parseInt(@Model.DeviceTypeId);
+            getDeviceTypeInformationInEditMode(deviceTypeId);
+        }
+    });
+    $("#deviceType").change(function () {
+        if ($("#prescriptionId").val() == 0) {
+            var deviceTypeId = $(this).val();
+            getDeviceTypeInformation(deviceTypeId);
+        } else if ($("#prescriptionId").val() != 0 && $(this).val() ==@(Model.DeviceTypeId==null ? 0 : Model.DeviceTypeId)) {
+            var deviceTypeId = $(this).val();
+            getDeviceTypeInformationInEditMode(deviceTypeId);
+        } else {
+            var deviceTypeId = $(this).val();
+            getDeviceTypeInformation(deviceTypeId);
+        }
+
+    })
+    function getDeviceTypeInformation(deviceTypeId) {
+         $.ajax({
+            url: '@Url.Action("GetDeviceTypeInformation", "Prescription")',
+            type: 'Post',
+            beforeSend: function () {
+                loadingBoxStart();
+            },
+            data: {
+                deviceTypeId: deviceTypeId
+            },
+             success: function (res) {
+                $(".tbody tr").remove();
+                 if (res.data.length) {
+                     setDeviceTypeInformation(res.data);
+                 } else {
+                    $.growl.error({ message: "برای نسخه انتخاب شده اطلاعاتی وجود ندارد" });
+                 }
+            },
+            complete: function () {
+                loadingBoxStop();
+            },
+        });
+    }
+    function getDeviceTypeInformationInEditMode(deviceTypeId) {
+         $.ajax({
+            url: '@Url.Action("GetDeviceTypeInformation", "Prescription")',
+            type: 'Post',
+            beforeSend: function () {
+                loadingBoxStart();
+            },
+            data: {
+                deviceTypeId: deviceTypeId
+            },
+             success: function (res) {
+                $(".tbody tr").remove();
+                 if (res.data.length) {
+                     setDeviceTypeInformationInEditMode(res.data);
+                 } else {
+                    $.growl.error({ message: "برای نسخه انتخاب شده اطلاعاتی وجود ندارد" });
+                 }
+            },
+            complete: function () {
+                loadingBoxStop();
+            },
+        });
+    }
+    function setDeviceTypeInformation(data) {
+
+        for (var i = 0;i< data.length; i++) {
+            var $template = $('<tr>'
+                + '<td class="text-info text-left">' + data[i].title + '</td>'
+                + '<td><div class="range"><div class="range-inner">'
+                + '<input type="hidden" class="rangeFrom" value=' + data[i].rangeFrom + '>'
+                + '<input type="hidden" class="rangeTo" value=' + data[i].rangeTo + '>'
+                + '<input type="hidden" class="first-time" value=' + true + '>'
+                + '<button type="button" style="top:-2px;" class="btn btn-info btn-sm minus"><i class="fa fa-minus"></i></button>'
+                + '<input type="text" class="range"/>'
+                + '<button type="button" style="top:-2px;" class="btn btn-info btn-sm plus"><i class="fa fa-plus"></i></button>'
+                + '</div></div></td> '
+                + '<td> From:' + data[i].rangeFrom + " To:" + data[i].rangeTo + '</td>'
+                + '<td class="resulotion">' + data[i].resolution + '</td>'
+                + '<td class="unit">' + data[i].unit + '</td>'
+                + '</tr>');
+            $template.find('.minus').click(function () {
+                debugger;
+                var resolution = parseFloat($(this).closest('tr').find('.resulotion').text());
+                minus($(this), resolution);
+            })
+            $template.find('.plus').click(function () {
+                var resolution = parseFloat($(this).closest('tr').find('.resulotion').text());
+                plus($(this), resolution);
+            })
+            $(".tbody").append($template);
+        }
+    }
+    function minus($element,resolution) {
+        debugger;   
+        var rangeVal = $element.closest('td').find('input.range').val()=="" ? 0 : parseFloat($element.closest('td').find('input.range').val());
+        var rangeFrom = $element.closest('td').find('.rangeFrom').val()=="" ? 0 : parseFloat($element.closest('td').find('.rangeFrom').val());
+        if (rangeVal - resolution >= rangeFrom) {
+            rangeVal = rangeVal - resolution;
+            $element.closest('td').find('input.range').val(rangeVal.toFixed(1));
+        } else {
+            $.growl.error({ message: "مقدار وارد شده صحیح نمی باشد." });
+        }
+
+    }
+    function plus($element, resolution) {
+        debugger;
+        var isFirstTime = $element.closest('td').find('.first-time').val() == "true";
+        var rangeVal = $element.closest('td').find('input.range').val()=="" ? 0 : parseFloat($element.closest('td').find('input.range').val());
+        var rangeTo = $element.closest('td').find('.rangeTo').val() == "" ? 0 : parseFloat($element.closest('td').find('.rangeTo').val());
+        var rangeFrom = $element.closest('td').find('.rangeFrom').val() == "" ? 0 : parseFloat($element.closest('td').find('.rangeFrom').val());
+        if (rangeVal + resolution <= rangeTo) {
+            rangeVal = isFirstTime ? rangeVal + rangeFrom + resolution : rangeVal + resolution;
+            $element.closest('td').find('.first-time').val(false);
+            $element.closest('td').find('input.range').val(rangeVal.toFixed(1));
+        } else {
+            $.growl.error({ message: "مقدار وارد شده صحیح نمی باشد." });
+        }
+    }
+    function setDeviceTypeInformationInEditMode(data) {
+        debugger;
+        var range = [];
+        if ($("#prescriptionId").val() != 0 && $("#prescriptionId").val() != "undefined") {
+            range ="@(Model.Range?.ToString())".split(',');
+        }
+
+        for (var i = 0;i< data.length; i++) {
+            var $template = $('<tr>'
+                + '<td class="text-info text-left">' + data[i].title + '</td>'
+                + '<td><div class="range"><div class="range-inner">'
+                + '<input type="hidden" class="rangeFrom" value=' + data[i].rangeFrom + '/>'
+                + '<input type="hidden" class="rangeTo" value=' + data[i].rangeTo + '/>'
+                + '<button type="button" style="top:-2px;" class="btn btn-info btn-sm minus"><i class="fa fa-minus"></i></button>'
+                + '<input type="text" value=' + range[i] + ' class="range"/>'
+                + '<button type="button" style="top:-2px;" class="btn btn-info btn-sm plus"><i class="fa fa-plus"></i></button>'
+                + '</div ></div ></td > '
+                + '<td> From:' + data[i].rangeFrom + " To:" + data[i].rangeTo + '</td>'
+                + '<td class="resulotion">' + data[i].resolution + '</td>'
+                + '<td class="unit">' + data[i].unit + '</td>'
+                + '</tr>');
+            $template.find('.minus').click(function () {
+                var resolution = parseFloat($(this).closest('tr').find('.resulotion').text());
+                minus($(this), resolution);
+            })
+            $template.find('.plus').click(function () {
+                var resolution = parseFloat($(this).closest('tr').find('.resulotion').text());
+                plus($(this), resolution);
+            })
+            $(".tbody").append($template);
+        }
+    }
+
+    $("#btnAddPrescriptionForPatient").click(function () {
+        var ranges = '';
+        $("input.range").each(function () {
+            var range = $(this).val().toString() + ",";
+            ranges += range;
+        });
+        if (!checkRange()) {
+            return;
+        }
+        $.ajax({
+            url: '@Url.Action("AddOrEdit", "Prescription")',
+            type: 'Post',
+            beforeSend: function () {
+                loadingBoxStart();
+            },
+            data: {
+                Range: ranges.slice(0, -1),
+                Id: $("#prescriptionId").val(),
+                PatientId:@patientId,
+                DeviceTypeId: $("#deviceType").val()
+            },
+            success: function (data) {
+                if (data.res) {
+                    $.growl.notice({ message: data.message });
+                }
+                $.growl.warning({ message: data.message });
+                location.reload();
+            },
+            complete: function () {
+                loadingBoxStop();
+            },
+        });
+    })
+
+    function checkRange() {
+        var valid = true;
+        $("input.range").each(function () {
+            debugger;
+            var range = parseFloat($(this).val());
+            var rangeFrom = parseFloat($(this).closest('td').find('.rangeFrom').val());
+            var rangeTo = parseFloat($(this).closest('td').find('.rangeTo').val());
+            var title = $(this).closest('tr').find('.text-info').text();
+            if (range < rangeFrom || range > rangeTo || isNaN(range)) {
+                var message = "مقدار وارد شده برای '" + title + "' صحیح نمی باشد";
+                $.growl.error({ message: message });
+                valid = false;
+            }
+        });
+        return valid;
+    }
+</script>

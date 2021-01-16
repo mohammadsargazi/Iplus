@@ -1,0 +1,157 @@
+﻿@model IEnumerable<Patient>
+
+<main role="main" class="container mt-4 mb-4 ">
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-12 col-md-8 mb-1">
+                <div class="patients-list">
+                    <div><h6>Patients List</h6>(<span>@Model.Count()</span> patients)</div>
+                    <div class="form-inline">
+                        <input class="form-control search-inp" type="search" placeholder="Name or ..." aria-label="Search">
+                        @*<button class="btn btn-info btn-sm search" type="submit">Search</button>*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 mb-1">
+                <div class="d-flex justify-content-between" style="float:right;">
+                    @*<div class="dropdown">
+                        <button class="btn btn-outline-info dropdown-toggle btn-sm" type="button" id="dropdownMenu2"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Sort By
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <button class="dropdown-item btn-sm" type="button">Action</button>
+                            <button class="dropdown-item btn-sm" type="button">Another action</button>
+                            <button class="dropdown-item btn-sm" type="button">Something else here</button>
+                        </div>
+                    </div>*@
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addPatientModal">
+                        <i class="fa fa-plus"></i> Add Patients
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4 container-patient">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 border-bottom border-right p-3 container-patient-list" style="border-color: #ccc">
+                    <div class="info">
+                        <img style="display:none;" src="../asset/profile.png">
+                        <span>
+                            <b>@item.FullName</b><br />
+                            National ID : @item.NantionalCode<br />
+                            Device ID : @(item.DeviceId==null ? "Unallocated device" : item.DeviceId.ToString())
+                        </span>
+                    </div>
+                    <div class="operation">
+                        <button data-id="@item.Id" class="btn btn-info btn-sm btn-more ">More</button><br />
+                        <button data-id="@item.Id" class="text-danger btn-delete">Delete</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</main>
+<div class="modal fade" id="addPatientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Add Patient
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="add-patient">
+                    <li>
+                        <label>Patient Name</label>
+                        <input type="text" id="patientName" placeholder="Ali Abedi">
+                    </li>
+                    <li>
+                        <label>Personal Id</label>
+                        <input style="margin-left: 23px;" type="text" id="personalId" placeholder="00 11 88">
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer text-center">
+                <!--                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                <button type="button" id="btnAddPatient" class="btn btn-success btn-sm">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".search-inp").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $(".container-patient-list").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+    $("#btnAddPatient").click(function () {
+        $.ajax({
+            url: '@Url.Action("Add", "Patient")',
+            type: 'Post',
+            beforeSend: function () {
+                loadingBoxStart();
+            },
+            data: {
+                patientName: $("#patientName").val(),
+                personalId: $("#personalId").val()
+            },
+            success: function (data) {
+                if (data.res) {
+                    $.growl.notice({ message: "ثبت اطلاعات با موفقیت انجام شد." });
+                    location.reload();
+                }
+                else {
+                    $.growl.error({ message: data.message });
+                }
+                $('#addPatientModal').modal('toggle');
+                
+            },
+            complete: function () {
+                loadingBoxStop();
+            },
+        });
+    });
+
+    $(".btn-delete").click(function () {
+        var patientId = $(this).attr("data-id");
+        $.ajax({
+            url: '@Url.Action("Delete", "Patient")',
+            type: 'Post',
+            beforeSend: function () {
+                loadingBoxStart();
+            },
+            data: {
+                id: patientId
+            },
+            success: function (data) {
+                if (data) {
+                    $.growl.notice({ message: data.message });
+                    setTimeout(function () {
+                        location.reload();
+                    }, 3000);
+                }
+                else {
+                    $.growl.warning({ message: data.message });
+                }
+                
+            },
+            complete: function () {
+                loadingBoxStop();
+            },
+        });
+    });
+
+    $(".btn-more").click(function () {
+        var patientId = $(this).attr("data-id");
+        location.href = "/PrescriptionAndFile/Index?patientId=" + patientId;
+    })
+
+
+</script>

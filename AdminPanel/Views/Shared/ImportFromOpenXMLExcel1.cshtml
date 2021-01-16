@@ -1,0 +1,65 @@
+﻿<h2>@ViewBag.Title</h2>
+<hr />
+<h3>Associate form</h3>
+<hr />
+@using (Html.BeginForm((string)ViewBag.Action, (string)ViewBag.Controller, FormMethod.Post))
+{
+    <input type="hidden" value="@ViewBag.FileName" name="filename" />
+    <table class="table">
+        <tr>
+            <td style="width:30%">
+                <h4>Properties of @ViewBag.Type.Name</h4>
+                <select id="properties" class="form-control">
+                    @foreach (HtmlPropertyControl i in ViewBag.Properties)
+                    {
+                        <option value="@i.FriendlyName.@i.propertyInfo.Name">@i.FriendlyName.@i.propertyInfo.Name</option>
+                    }
+                </select>
+            </td>
+            <td style="width:30%">
+                <h4>Sheet columns</h4>
+                <select id="headers" class="form-control">
+                    @foreach (var i in ViewBag.Headers)
+                    {
+                        <option value="@i">@i.Value (@i)</option>
+                    }
+                </select>
+            </td>
+            <td style="width:10%">
+                <input type="button" onclick="Add()" value=">>" class="btn btn-primary" />
+            </td>
+            <td style="width:30%">
+                <table class="table"  id="joins" >
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th></th>
+                            <th>Sheet column</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <input type="submit" class="btn btn-primary" value="Import"/>
+}
+
+<script>
+    $k = 0;
+
+    function Add() {
+        $("#joins").append('<tr id="p' + $k + '"><td><input type="hidden" name="combo" value="' + $("#properties").val() + '[->]' + $("#headers").val() + '"/>' + $("#properties").val() +'</td><td>=></td><td>' + $("#headers").val()+'</td><td><input type="button" class="btn btn-danger" value="X" onclick="Rem('+$k+')"/>'+'</td></tr>')
+        $k++;
+    }
+
+    function Rem(id)
+    {
+        $("#p" + id).empty();
+    }
+
+</script>

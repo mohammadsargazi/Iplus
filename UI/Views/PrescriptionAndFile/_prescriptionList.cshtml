@@ -1,0 +1,110 @@
+﻿@{
+    Layout = null;
+    var patientId = (int)ViewData["PatientId"];
+}
+@model IEnumerable<Prescription>
+
+<div class="d-flex justify-content-between Presciption">
+    <div><h6>Presciption</h6>(<span>@Model.Count()</span> item)</div>
+    <button type="button" class="btn btn-success btn-sm" id="addPrescription">
+        <i class="fa fa-plus"></i> Add Presciption
+    </button>
+</div>
+<div class="row mt-3">
+    <div class="table-responsive">
+        <table class="table table-striped tb-Presciption ">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"><span>Data</span></th>
+                    <th scope="col"><span>Mode</span></th>
+                    <th scope="col"><span>Date And Time</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var count = 1;
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row">@count.</th>
+                        <td>Mark</td>
+                        <td>@item.DeviceType?.Title</td>
+                        <td>@item.CreateDate</td>
+                        <td class="text-right">
+                            <button data-id="@item.Id" class="text-info btn-delete btn-detail-prescription">Show More</button>
+                            @*<button data-id="@item.Id" class="text-danger btn-delete btn-delete-prescription">Edit</button>*@
+                            <button data-id="@item.Id" class="text-danger btn-delete btn-delete-prescription">Delete</button>
+                        </td>
+                    </tr>
+                    count++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(".btn-delete-prescription").click(function () {
+        var presciptionId = $(this).attr('data-id');
+        $.ajax({
+            url: '@Url.Action("Delete", "Prescription")',
+            type: 'Post',
+            beforeSend: function () {
+                loadingBoxStart();
+            },
+            data: {
+                prescriptionId: presciptionId
+            },
+            success: function (data) {
+                if (data.res) {
+                    $.growl.notice({ message: data.message });
+                    location.reload();
+                }
+                $.growl.warning({ message: data.message });
+            },
+            complete: function () {
+                loadingBoxStop();
+            },
+        });
+    });
+    $(".btn-detail-prescription").click(function () {
+        var presciptionId = $(this).attr('data-id');
+        $.ajax({
+            url: '@Url.Action("ShowMore", "Prescription")',
+            type: 'Post',
+            beforeSend: function () {
+                loadingBoxStart();
+            },
+            data: {
+                presciptionId: presciptionId
+            },
+            success: function (html) {
+                $("#nav-prescription").html(html);
+            },
+            complete: function () {
+                loadingBoxStop();
+            },
+        });
+    });
+    $("#addPrescription").click(function () {
+        $.ajax({
+            url: '@Url.Action("Add", "Prescription")',
+            type: 'Post',
+            data: {
+                patientId: @patientId
+            },
+            beforeSend: function () {
+                loadingBoxStart();
+            },
+            success: function (html) {
+                $("#nav-prescription").html(html);
+            },
+            complete: function () {
+                loadingBoxStop();
+            },
+        });
+    })
+</script>
