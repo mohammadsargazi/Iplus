@@ -45,6 +45,7 @@ namespace IPlusApp.Functionality
             chart.Size = new Size(width - 30, 200);
             chart.Location = new Point(8, locationY);
             chart.Anchor = (AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right);
+            chart.Titles.Add(chartName);
             var series = new Series
             {
                 Name = chartName,
