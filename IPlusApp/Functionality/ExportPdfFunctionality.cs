@@ -31,7 +31,7 @@ namespace IPlusApp.Functionality
                 html = html + GetColumnChartContainer(model.EpapMinimumArray, model.EpapMedianArray, model.EpapPrecentileArray, "EpapContainer", "Epap");
             }
             if (model.ChAHIAI)
-                html = html + GetColumnChartContainer(model.Ahi.Split(',')[1], "AhiContainer", "Ahi" + "(" + model.AHI + ")");
+                html = html + GetColumnChartContainer(model.AHI, "AhiContainer", "Ahi" + "(" + model.AHI + ")");
             if (model.ChLEAK)
                 html = html + GetColumnChartContainer(model.LeakMinimumArray, model.LeakMedianArray, model.LeakPrecentileArray, "leakContainer", "leak");
             if (model.ChLEAK)
