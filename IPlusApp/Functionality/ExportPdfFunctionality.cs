@@ -24,7 +24,7 @@ namespace IPlusApp.Functionality
             html = GetStartHtml() + GetHeader(model) + GetPatientProfile(model) + GetBreakPage() + GetBreakPage() + GetHeader(model) + GetStatistics(model) + GetBreakPage() + GetBreakPage();
             //html = html + GetBreakPage() + GetBreakPage();
             html = html + GetHeader(model);
-
+            html=html+ GetColumnChartContainerText(model.IpapMinimumArray, model.IpapMedianArray, model.IpapPrecentileArray, "IpapContainertest", "Ipaptest");
             if (model.IsAvaps)
             {
                 html = html + GetColumnChartContainer(model.IpapMinimumArray, model.IpapMedianArray, model.IpapPrecentileArray, "IpapContainer", "Ipap");
@@ -83,7 +83,9 @@ namespace IPlusApp.Functionality
                 $"<script>{jqueryContents}</script>" +
                 $"<script>{highchartContents}</script>" +
                 $"<script>{chartfunctionContents}</script>" +
-                "<style>.highcharts-container {max-height: 250px;}</style></head>" +
+                //"<script>if ('matchMedia' in window) { location.reload(); }</script>" +
+                //"<style>.highcharts-container {max-height: 250px;}</style>" +
+                "</head>" +
                 "<body style=' max-width: 960px;height: 842px;background: #fff;width: 100%;font-family: sans-serif;font-size: 0.8rem;color: #444444;padding-right: 15px;padding-left: 15px;margin-right: auto;margin-left: auto;'>";
         }
         private string GetEndHtml()
@@ -107,22 +109,35 @@ namespace IPlusApp.Functionality
         {
             return "<div style='display:block;page-break-before:always;'></div>";
         }
-        private string GetColumnChartContainer(string precintail, string minimum, string median, string containerId, string title)
+        private string GetColumnChartContainerText(string precintail, string minimum, string median, string containerId, string title)
         {
-            return "<div style='display: block;'><figure style='display: block;margin-block-start: 1em;margin-block-end: 1em;margin-inline-start: 40px;margin-inline-end: 40px;'>" +
-             $"<div style='overflow: visible !important' id='{containerId}'></div>" +
+            return "<div style='display: none;'>" +
+             //"<figure style='display: block;margin-block-start: 1em;margin-block-end: 1em;margin-inline-start: 40px;margin-inline-end: 40px;'>" +
+             $"<div style='overflow: visible !important;' id='{containerId}'></div>" +
              "<script>$(function () { " +
              $"columnChart('{containerId}',[{minimum}],[{median}],[{precintail}],'{title}') " +
              "})</script>" +
-             "</figure></div>";
+             //"</figure>" +
+             "</div>";
+        }
+        private string GetColumnChartContainer(string precintail, string minimum, string median, string containerId, string title)
+        {
+            return /*"<div style='display: block;'>" +*/
+             //"<figure style='display: block;margin-block-start: 1em;margin-block-end: 1em;margin-inline-start: 40px;margin-inline-end: 40px;'>" +
+             $"<div style='overflow: visible !important;' id='{containerId}'></div>" +
+             "<script>$(function () { " +
+             $"columnChart('{containerId}',[{minimum}],[{median}],[{precintail}],'{title}') " +
+             "})</script>";
+             //"</figure>" +
+             //"</div>";
         }
         private string GetColumnChartContainer(string model, string containerId, string title)
         {
-            return $"<div style='max-height:250px !important;overflow: visible !important' id='{containerId}'></div><script>OneColumnChart('{containerId}','{model}','{title}')</script>";
+            return $"<div style='max-height:250px !important;overflow: visible !important;' id='{containerId}'></div><script>OneColumnChart('{containerId}','{model}','{title}')</script>";
         }
         private string GetLineChartContainer(string minimum, string median, string precintail, string containerId, string title)
         {
-            return $"<div style='max-height:250px !important;overflow: visible !important' id='{containerId}'></div><script>lineChart('{containerId}',[{minimum}],[{median}],[{precintail}],'{title})</script>";
+            return $"<div style='max-height:250px !important;overflow: visible !important;' id='{containerId}'></div><script>lineChart('{containerId}',[{minimum}],[{median}],[{precintail}],'{title})</script>";
         }
 
 
