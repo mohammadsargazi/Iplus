@@ -83,7 +83,7 @@ namespace IPlusApp.Functionality
                 $"<script>{jqueryContents}</script>" +
                 $"<script>{highchartContents}</script>" +
                 $"<script>{chartfunctionContents}</script>" +
-                "</head>" +
+                "<style>.highcharts-container {max-height: 250px;}</style></head>" +
                 "<body style=' max-width: 960px;height: 842px;background: #fff;width: 100%;font-family: sans-serif;font-size: 0.8rem;color: #444444;padding-right: 15px;padding-left: 15px;margin-right: auto;margin-left: auto;'>";
         }
         private string GetEndHtml()
